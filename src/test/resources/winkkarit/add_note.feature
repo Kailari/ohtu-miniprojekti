@@ -1,6 +1,6 @@
-Feature: Käyttäjä voi lisätä uuden vinkin
+Feature: The user can add a new reading tip
 
-    Scenario: Käyttäjä voi lisätä uuden vinkin
-        Given   Käyttäjä on sivulla josta vinkki lisätään
-        When    Kirjoittaja "Robert Martin" ja otsikko "Clean Code: A Handbook of Agile Software Craftmanship"
-        Then    Uusi vinkki luodaan
+    Scenario: User can add a new tip with valid information
+        Given   User is on the new tip page
+        When    Author "Robert Martin" and title "Clean Code: A Handbook of Agile Software Craftmanship" are entered
+        Then    New tip is created
