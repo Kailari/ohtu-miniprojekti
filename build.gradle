@@ -3,13 +3,21 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'joku.package.Main'
+application {
+    mainClassName = 'winkkari.main.Main'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // Spark
+    implementation "com.sparkjava:spark-core:${sparkVersion}"
+
+    // Thymeleaf
+    implementation "com.sparkjava:spark-template-thymeleaf:${thymeleafVersion}"
+
     // Logging
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"
     runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
@@ -41,6 +49,6 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ohtu.Main'
+        attributes "Main-Class": "${application.mainClassName}"
     }
 }

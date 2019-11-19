@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Winkkari</title>
+</head>
+<body>
+
+<h1>All tips</h1>
+<table>
+    <thead>
+    <tr>Title</tr>
+    <tr>Author</tr>
+    </thead>
+    <tbody>
+    <tr th:if="${tips.empty}">
+        <td colspan="2">No tips available :c</td>
+    </tr>
+    <tr th:each="tip : ${tips}">
+        <td>
+            <span th:text="${tip.title}">Title</span>
+        </td>
+        <td>
+            <span th:text="${tip.author}">Author</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
