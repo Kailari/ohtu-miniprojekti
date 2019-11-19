@@ -10,6 +10,33 @@ repositories {
 }
 
 dependencies {
+    // Logging
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+    // JUnit 5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${jUnitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${jUnitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jUnitVersion}"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${jUnitVersion}"
+
+    // Mockito
+    testCompileOnly "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoJUnitVersion}"
+
+    // Cucumber
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+}
+
+test {
+    environment "ENV", "test"
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams true
+        events "passed", "skipped", "failed"
+        stackTraceFilters = []
+    }
 }
 
 jar {
