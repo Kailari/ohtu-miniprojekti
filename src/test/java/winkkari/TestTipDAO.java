@@ -20,7 +20,7 @@ class TestTipDAO implements TipDAO {
     private static final String TABLE_NAME = "TIPS";
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:h2:~/winkkari", "", "");
+        return DriverManager.getConnection("jdbc:h2:~/winkkariTest", "", "");
     }
     
     public TestTipDAO() {
@@ -80,4 +80,18 @@ class TestTipDAO implements TipDAO {
             return List.of();
         }
     }
+
+    @Override
+    public void delete(String id) {
+        try (final var conn = getConnection();
+             final var statement = conn.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE ID = ?;")
+        ) {
+            statement.setString(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Error deleting database entry: ", e);
+        }
+    }
+    
+    
 }
