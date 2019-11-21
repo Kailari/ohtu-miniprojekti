@@ -64,6 +64,12 @@ public class Winkkari {
             return res;
         });
 
+        Spark.post("/api/tip/delete/:id", (req, res) -> {
+            tipDAO.delete(req.params(":id"));
+            res.redirect("/list");
+            return res;
+        });
+
         LOG.info("Winkkari initialization finished.");
 
         // Block until Spark is finished

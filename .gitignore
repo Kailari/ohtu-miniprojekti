@@ -1,4 +1,8 @@
 /.idea/
 /.gradle/
 /build/
+<<<<<<< HEAD
 /.nb-gradle/
+=======
+.project
+>>>>>>> delete
