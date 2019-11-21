@@ -65,8 +65,8 @@ public class DatabaseDAO implements TipDAO {
             final List<Tip> foundTips = new ArrayList<>();
             while (rs.next()) {
                 foundTips.add(new Tip(rs.getString("id"),
-                                      rs.getString("title"),
-                                      rs.getString("author")));
+                        rs.getString("title"),
+                        rs.getString("author")));
             }
             return foundTips;
         } catch (SQLException e) {
@@ -74,4 +74,17 @@ public class DatabaseDAO implements TipDAO {
             return List.of();
         }
     }
+
+    @Override
+    public void delete(String id) {
+        try (final var conn = getConnection();
+             final var statement = conn.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE ID = ?;")
+        ) {
+            statement.setString(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Error deleting database entry: ", e);
+        }
+    }
+
 }

@@ -46,20 +46,26 @@ public class Winkkari {
             final String author = req.queryParams("author");
             final String title = req.queryParams("title");
 
-            if (author == null) {
-                LOG.warn("Error adding a new tip, author was null!");
+            if (author == null || author.isEmpty()) {
+                LOG.warn("Error adding a new tip, author was null or empty!");
                 res.redirect("/list");
                 return res;
             }
 
-            if (title == null) {
-                LOG.warn("Error adding a new tip, title was null!");
+            if (title == null || title.isEmpty()) {
+                LOG.warn("Error adding a new tip, title was null or empty!");
                 res.redirect("/list");
                 return res;
             }
 
             tipDAO.add(new Tip(title, author));
 
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.post("/api/tip/delete/:id", (req, res) -> {
+            tipDAO.delete(req.params(":id"));
             res.redirect("/list");
             return res;
         });

@@ -3,28 +3,96 @@ package winkkari;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import io.cucumber.java.After;
+import java.util.Random;
 
 public class Stepdefs {
+//    private final WebDriver driver = new FirefoxDriver();
     private final WebDriver driver = new HtmlUnitDriver();
     private final String baseUrl = "http://localhost:4567";
+    Random random = new Random();
+    int rand = random.nextInt()*10;
 
+    @Given("User is on the main page")
+    public void userIsOnTheMainPage() {
+        driver.get(baseUrl);
+    }
+    
     @Given("User is on the new tip page")
     public void userIsOnTheNewTipPage() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("Add a new tip"));       
+        element.click(); 
     }
 
     @When("Author {string} and title {string} are entered")
-    public void authorAndTitleAreEntered(String string, String string2) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void authorAndTitleAreEntered(String author, String title) {
+        createNewTip(author+rand, title+rand);
     }
 
     @Then("New tip is created")
     public void newTipIsCreated() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        pageHasContent(Integer.toString(rand));
+    }
+    
+    @When("Empty author and empty title are entered")
+    public void emptyAuthorAndEmptyTitleAreEntered() {
+        createNewTip("", "");
+    }
+    
+    @Then("New tip is not created and the user is taken to the list page")
+    public void newTipIsNotCreatedAndTheUserIsTakenToTheListPage(){
+        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        pageHasContent("All tips");
+    }
+    
+    @When("Empty author and title {string} are entered")
+    public void emptyAuthorAndTitleAreEntered(String title) {
+        createNewTip("", title);
+    }
+    
+    @When("Author {string} and empty title are entered")
+    public void emptyAuthorAndEmptyTitleAreEntered(String author) {
+        createNewTip(author, "");
+    }
+    
+    @When("User wants to check tips and clicks {string}")
+    public void userGoesToListAllTips(String string){
+        WebElement element = driver.findElement(By.linkText(string));       
+        element.click(); 
+    }
+    
+    @Then("All the available tips will be displayed")
+    public void allTheAvailableTipsWillBeDisplayed(){
+        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        pageHasContent("All tips");
+    }
+    
+    @After
+    public void tearDown(){
+        driver.quit();
+    }
+    
+    //Helper methods:
+    
+    private void pageHasContent(String content) {
+        assertTrue(driver.getPageSource().contains(content));
+    }
+    
+    private void createNewTip(String author, String title){
+        assertTrue(driver.getPageSource().contains("Add new tip"));
+        WebElement element = driver.findElement(By.name("author"));
+        element.sendKeys(author);
+        element = driver.findElement(By.name("title"));
+        element.sendKeys(title);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
     }
 }

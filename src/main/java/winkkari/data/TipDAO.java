@@ -9,4 +9,6 @@ public interface TipDAO {
     Optional<Tip> get(String id);
 
     Collection<Tip> getAll();
+
+    void delete(String id);
 }
