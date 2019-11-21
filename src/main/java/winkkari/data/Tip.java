@@ -11,6 +11,12 @@ public class Tip {
         this.author = author;
     }
 
+    public Tip(String title, String author) {
+        this.id = null;
+        this.title = title;
+        this.author = author;
+    }
+
     public String getId() {
         return id;
     }

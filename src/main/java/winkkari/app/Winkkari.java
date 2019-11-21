@@ -8,7 +8,6 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import winkkari.data.Tip;
 import winkkari.data.TipDAO;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,13 +30,43 @@ public class Winkkari {
         Spark.staticFiles.location("/public");
 
         Spark.get("/", (req, res) -> new ModelAndView(Map.ofEntries(
-                Map.entry("message", "Cats are dogs")
+                // nothing
         ), "index"), new ThymeleafTemplateEngine());
 
         Spark.get("/list", (req, res) -> new ModelAndView(Map.ofEntries(
                 Map.entry("tips", tipDAO.getAll())
         ), "list"), new ThymeleafTemplateEngine());
 
+        Spark.get("/new", (req, res) -> new ModelAndView(Map.ofEntries(
+                // nothing
+        ), "new"), new ThymeleafTemplateEngine());
+
+
+        Spark.post("/api/tip/new", (req, res) -> {
+            final String author = req.queryParams("author");
+            final String title = req.queryParams("title");
+
+            if (author == null) {
+                LOG.warn("Error adding a new tip, author was null!");
+                res.redirect("/list");
+                return res;
+            }
+
+            if (title == null) {
+                LOG.warn("Error adding a new tip, title was null!");
+                res.redirect("/list");
+                return res;
+            }
+
+            tipDAO.add(new Tip(title, author));
+
+            res.redirect("/list");
+            return res;
+        });
+
         LOG.info("Winkkari initialization finished.");
+
+        // Block until Spark is finished
+        Spark.awaitStop();
     }
 }
