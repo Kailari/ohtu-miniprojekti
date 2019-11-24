@@ -14,12 +14,13 @@ public class DatabaseDAO implements TipDAO {
     private static final String TABLE_NAME = "TIPS";
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:h2:~/winkkari", "", "");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Tips", "USERNAME", "PW");
+        //return DriverManager.getConnection("jdbc:h2:~/winkkari", "", "");
     }
 
     public DatabaseDAO() {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID VARCHAR(24) PRIMARY KEY AUTO_INCREMENT, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
+             final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID SERIAL PRIMARY KEY, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
         ) {
             statement.execute();
         } catch (SQLException ignored) {
@@ -45,7 +46,7 @@ public class DatabaseDAO implements TipDAO {
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
-            statement.setString(1, id);
+            statement.setInt(1, Integer.valueOf(id));
 
             final ResultSet rs = statement.executeQuery();
             final Tip tip = new Tip(rs.getString("id"), rs.getString("title"), rs.getString("author"));
@@ -80,7 +81,7 @@ public class DatabaseDAO implements TipDAO {
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
-            statement.setString(1, id);
+            statement.setInt(1, Integer.valueOf(id));
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Error deleting database entry: ", e);
