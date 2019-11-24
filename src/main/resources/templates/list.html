@@ -25,7 +25,8 @@
             <span th:text="${tip.author}">Author</span>
         </td>
         <td>
-            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post"><input type="submit" value="Delete"/></form>
+            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post">
+                <input name="Delete" type="submit" value="Delete"/></form>
         </td>
     </tr>
     </tbody>
