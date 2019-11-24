@@ -11,3 +11,10 @@ Kloonaa repositoria omalle koneelle. Suorita projektin juuressa komento
 ```./gradlew run```
 
 Avaa selaimesi osoitteessa http://localhost:4567
+
+Definition of done
+------
+
+- Koodi on versionhallinnassa
+- Vaatimuksen hyväksymiskriteerit täyttyvät ja ne on testattu cucumberilla 
+- Toiminnalisuus on testattu manuaalisesti
