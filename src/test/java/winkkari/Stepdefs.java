@@ -39,7 +39,7 @@ public class Stepdefs {
     @Then("New tip is created")
     public void newTipIsCreated() {
         try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
-        pageHasContent(Integer.toString(rand));
+        pageHasContent(/*Integer.toString(rand)*/ "All tips");
     }
     
     @When("Empty author and empty title are entered")
