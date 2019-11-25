@@ -14,7 +14,11 @@ public class DatabaseDAO implements TipDAO {
     private static final String TABLE_NAME = "TIPS";
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Tips", "USERNAME", "PW");
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        if (dbUrl != null && dbUrl.length() > 0) {
+            return DriverManager.getConnection(dbUrl);
+        }
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Tips", "", "");
         //return DriverManager.getConnection("jdbc:h2:~/winkkari", "", "");
     }
 
