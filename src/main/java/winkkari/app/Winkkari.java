@@ -23,7 +23,7 @@ public class Winkkari {
     public void run() {
         LOG.info("Winkkari booting up...");
 
-        Optional.ofNullable(System.getProperty("PORT"))
+        Optional.ofNullable(System.getenv("PORT"))
                 .map(Integer::parseInt)
                 .ifPresent(Spark::port);
         /*if (System.getenv("PORT") != null) {
