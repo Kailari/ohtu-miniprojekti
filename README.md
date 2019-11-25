@@ -4,10 +4,17 @@ ohtu-miniprojekti
 
 Linkki backlogiin: [Backlog](https://docs.google.com/spreadsheets/d/1A7bFuC94nnD2Oi_YOjuGRTWVc1qqFF7l5TMxu0DABs0/edit?usp=sharing)
 
-Robert H testikommitti
+Ohjelman asennus- ja käyttohje:
 
-Markus A test commit
+Kloonaa repositoria omalle koneelle. Suorita projektin juuressa komento
 
-Tuukka testi3
+```./gradlew run```
 
-Robert P test commit
+Avaa selaimesi osoitteessa http://localhost:4567
+
+Definition of done
+------
+
+- Koodi on versionhallinnassa
+- Vaatimuksen hyväksymiskriteerit täyttyvät ja ne on testattu cucumberilla 
+- Toiminnalisuus on testattu manuaalisesti

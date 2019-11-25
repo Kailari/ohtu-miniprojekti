@@ -8,8 +8,10 @@
 <h1>All tips</h1>
 <table>
     <thead>
-    <tr>Title</tr>
-    <tr>Author</tr>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+    </tr>
     </thead>
     <tbody>
     <tr th:if="${tips.empty}">
@@ -23,11 +25,14 @@
             <span th:text="${tip.author}">Author</span>
         </td>
         <td>
-            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post"><input type="submit" value="Delete"/></form>
+            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post">
+                <input name="Delete" type="submit" value="Delete"/></form>
         </td>
     </tr>
     </tbody>
 </table>
+
+<a href="/new">Add a new tip</a>
 
 </body>
 </html>
