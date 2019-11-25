@@ -23,12 +23,12 @@ public class Winkkari {
     public void run() {
         LOG.info("Winkkari booting up...");
 
-        /*Optional.ofNullable(System.getProperty("PORT"))
+        Optional.ofNullable(System.getProperty("PORT"))
                 .map(Integer::parseInt)
-                .ifPresent(Spark::port);*/
-        if (System.getenv("PORT") != null) {
+                .ifPresent(Spark::port);
+        /*if (System.getenv("PORT") != null) {
             Spark.port(Integer.valueOf(System.getenv("PORT")));
-        }
+        }*/
 
         Spark.staticFiles.location("/public");
 
