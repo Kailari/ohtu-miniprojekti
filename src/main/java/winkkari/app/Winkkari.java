@@ -26,9 +26,6 @@ public class Winkkari {
         Optional.ofNullable(System.getenv("PORT"))
                 .map(Integer::parseInt)
                 .ifPresent(Spark::port);
-        /*if (System.getenv("PORT") != null) {
-            Spark.port(Integer.valueOf(System.getenv("PORT")));
-        }*/
 
         Spark.staticFiles.location("/public");
 

@@ -19,7 +19,6 @@ public class DatabaseDAO implements TipDAO {
             return DriverManager.getConnection(dbUrl);
         }
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Tips", "", "");
-        //return DriverManager.getConnection("jdbc:h2:~/winkkari", "", "");
     }
 
     public DatabaseDAO() {

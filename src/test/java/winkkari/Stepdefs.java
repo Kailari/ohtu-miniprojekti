@@ -51,7 +51,6 @@ public class Stepdefs {
         createNewTip("Testaaja", "Testi2");
     }
 
-
     @When("Author {string} and title {string} are entered")
     public void authorAndTitleAreEntered(String author, String title) {
         createNewTip(author + rand, title + rand);
@@ -59,8 +58,8 @@ public class Stepdefs {
 
     @Then("New tip is created")
     public void newTipIsCreated() {
-        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
-        pageHasContent(/*Integer.toString(rand)*/ "All tips");
+        try{ Thread.sleep(1000); } catch(Exception e){}
+        pageHasContent(Integer.toString(rand));
     }
 
     @When("Empty author and empty title are entered")
@@ -70,7 +69,7 @@ public class Stepdefs {
 
     @Then("New tip is not created and the user is taken to the list page")
     public void newTipIsNotCreatedAndTheUserIsTakenToTheListPage() {
-        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        try{ Thread.sleep(1000); } catch(Exception e){}
         pageHasContent("All tips");
     }
 
@@ -92,7 +91,7 @@ public class Stepdefs {
 
     @Then("All the available tips will be displayed")
     public void allTheAvailableTipsWillBeDisplayed() {
-        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        try{ Thread.sleep(1000); } catch(Exception e){}
         pageHasContent("All tips");
     }
 
@@ -105,11 +104,10 @@ public class Stepdefs {
 
     @Then("The tip is deleted")
     public void tipIsDeleted() {
-        try{ Thread.sleep(1000); } catch(Exception e){} //Sleep for 1 sec
+        try{ Thread.sleep(1000); } catch(Exception e){}
         pageHasNotContent("Testi2");
 
     }
-
 
     @After
     public void tearDown() {
