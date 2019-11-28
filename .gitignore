@@ -1,11 +1,9 @@
 /.idea/
 /.gradle/
 /build/
-<<<<<<< HEAD
 /.nb-gradle/
-=======
 .project
->>>>>>> delete
 .classpath
 .settings/
 /bin/
+.vscode/
