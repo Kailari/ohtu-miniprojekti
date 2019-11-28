@@ -12,17 +12,33 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
 
 import java.sql.SQLOutput;
 import java.util.Random;
 
 public class Stepdefs {
-    //    private final WebDriver driver = new FirefoxDriver();
-    private final WebDriver driver = new HtmlUnitDriver();
+    private WebDriver driver;
     private final String baseUrl = "http://localhost:4567";
-    Random random = new Random();
-    int rand = random.nextInt() * 10;
+    int rand;
+
+    @Before
+    public void setUp() {
+        /*
+        System.setProperty(
+            "webdriver.chrome.driver",
+            "F:\\Downloads\\chromedriver_win32\\chromedriver.exe"
+        );
+        driver = new ChromeDriver();
+        */
+        //driver = new FirefoxDriver();
+        driver = new HtmlUnitDriver();
+
+        Random random = new Random();
+        rand = random.nextInt() * 10;
+    }
 
     @Given("User is on the main page")
     public void userIsOnTheMainPage() {
@@ -58,7 +74,7 @@ public class Stepdefs {
 
     @Then("New tip is created")
     public void newTipIsCreated() {
-        try{ Thread.sleep(1000); } catch(Exception e){}
+        sleep(1);
         pageHasContent(Integer.toString(rand));
     }
 
@@ -69,7 +85,7 @@ public class Stepdefs {
 
     @Then("New tip is not created and the user is taken to the list page")
     public void newTipIsNotCreatedAndTheUserIsTakenToTheListPage() {
-        try{ Thread.sleep(1000); } catch(Exception e){}
+        sleep(1);
         pageHasContent("All tips");
     }
 
@@ -91,22 +107,23 @@ public class Stepdefs {
 
     @Then("All the available tips will be displayed")
     public void allTheAvailableTipsWillBeDisplayed() {
-        try{ Thread.sleep(1000); } catch(Exception e){}
+        sleep(1);
         pageHasContent("All tips");
     }
 
     @When("User wants to delete the tip and clicks delete")
     public void userDeletesTip() {
-        WebElement element = driver.findElement(By.xpath("//table/tbody/tr[td[span[text()='Testi2']]]/td[3]/form/input[1]"));
+        WebElement element = driver.findElement(By.xpath(
+            "//table/tbody/tr[td[span[text()='Testi2']]]/td[4]/form/input"
+        ));
         System.out.println("TAG IS:   " + element.getTagName());
         element.submit();
     }
 
     @Then("The tip is deleted")
     public void tipIsDeleted() {
-        try{ Thread.sleep(1000); } catch(Exception e){}
+        sleep(1);
         pageHasNotContent("Testi2");
-
     }
 
     @After
@@ -132,5 +149,11 @@ public class Stepdefs {
         element.sendKeys(title);
         element = driver.findElement(By.name("submit"));
         element.submit();
+    }
+
+    private static void sleep(int n){
+        try{
+            Thread.sleep(n*1000);
+        } catch(Exception e){}
     }
 }
