@@ -113,7 +113,7 @@ public class Stepdefs {
 
     @When("User wants to delete the tip and clicks delete")
     public void userDeletesTip() {
-        sleep(4);
+        sleep(10);
         WebElement element = driver.findElement(By.xpath(
             "//table/tbody/tr[td[span[text()='Testi2']]]/td[4]/form/input"
         ));
