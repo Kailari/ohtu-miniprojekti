@@ -11,6 +11,7 @@
     <tr>
         <th>Title</th>
         <th>Author</th>
+        <th>Checked</th>
     </tr>
     </thead>
     <tbody>
@@ -23,6 +24,9 @@
         </td>
         <td>
             <span th:text="${tip.author}">Author</span>
+        </td>
+        <td>
+            <input type="checkbox" name="check" value="check"><br>
         </td>
         <td>
             <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post">
