@@ -25,9 +25,11 @@ class TestTipDAO implements TipDAO {
     
     public TestTipDAO() {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID VARCHAR(24) PRIMARY KEY AUTO_INCREMENT, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
+            final var dropStatement = conn.prepareStatement("DROP TABLE " + TABLE_NAME + ";");
+            final var createStatement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID VARCHAR(24) PRIMARY KEY AUTO_INCREMENT, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
         ) {
-            statement.execute();
+            dropStatement.execute();
+            createStatement.execute();
         } catch (SQLException ignored) {
             LOG.warn("Creating table failed. This is normal if table already exists.");
         }
