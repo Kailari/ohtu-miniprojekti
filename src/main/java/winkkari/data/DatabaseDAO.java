@@ -3,7 +3,10 @@ package winkkari.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +16,13 @@ public class DatabaseDAO implements TipDAO {
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseDAO.class);
     private static final String TABLE_NAME = "TIPS";
 
+    private final ConnectionProvider connectionProvider;
+
     private Connection getConnection() throws SQLException {
+        return connectionProvider.get();
+    }
+
+    private static Connection defaultConnectionProvider() throws SQLException {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         if (dbUrl != null && dbUrl.length() > 0) {
             return DriverManager.getConnection(dbUrl);
@@ -22,6 +31,12 @@ public class DatabaseDAO implements TipDAO {
     }
 
     public DatabaseDAO() {
+        this(DatabaseDAO::defaultConnectionProvider);
+    }
+
+    public DatabaseDAO(ConnectionProvider connectionProvider) {
+        this.connectionProvider = connectionProvider;
+
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID SERIAL PRIMARY KEY, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
         ) {
@@ -49,9 +64,14 @@ public class DatabaseDAO implements TipDAO {
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
-            statement.setInt(1, Integer.valueOf(id));
+            statement.setInt(1, Integer.parseInt(id));
 
             final ResultSet rs = statement.executeQuery();
+            if (!rs.next()) {
+                LOG.trace("Unknown id \"{}\"", id);
+                return Optional.empty();
+            }
+
             final Tip tip = new Tip(rs.getString("id"), rs.getString("title"), rs.getString("author"));
             return Optional.of(tip);
         } catch (SQLException e) {
@@ -69,8 +89,8 @@ public class DatabaseDAO implements TipDAO {
             final List<Tip> foundTips = new ArrayList<>();
             while (rs.next()) {
                 foundTips.add(new Tip(rs.getString("id"),
-                        rs.getString("title"),
-                        rs.getString("author")));
+                                      rs.getString("title"),
+                                      rs.getString("author")));
             }
             return foundTips;
         } catch (SQLException e) {
@@ -91,4 +111,7 @@ public class DatabaseDAO implements TipDAO {
         }
     }
 
+    public interface ConnectionProvider {
+        Connection get() throws SQLException;
+    }
 }
