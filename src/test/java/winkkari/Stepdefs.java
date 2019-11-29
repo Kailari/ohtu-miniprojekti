@@ -127,6 +127,17 @@ public class Stepdefs {
         pageHasNotContent("Testi2");
     }
 
+    @Given("There are tips of multiple types available")
+    public void thereAreTipsOfMultipleTypesAvailable() {
+        // Well but there are! (ServerRule.java)
+    }
+
+    @Then("Tips of all types will be displayed")
+    public void tipsOfAllTypesWillBeDisplayed() {
+        pageHasContent("This is a BookTip");
+        pageHasContent("This is a LinkTip");
+    }
+
     @After
     public void tearDown() {
         driver.quit();

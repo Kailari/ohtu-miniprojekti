@@ -3,12 +3,12 @@ package winkkari.data;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface TipDAO {
-    void add(Tip tip);
+public interface TipDAO<TTip extends Tip> {
+    void add(TTip tip);
 
-    Optional<Tip> get(String id);
+    Optional<TTip> get(String id);
 
-    Collection<Tip> getAll();
+    Collection<TTip> getAll();
 
     void delete(String id);
 }

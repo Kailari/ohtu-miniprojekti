@@ -10,7 +10,7 @@
     <thead>
     <tr>
         <th>Title</th>
-        <th>Author</th>
+        <th>Author/URL</th>
         <th>Checked</th>
     </tr>
     </thead>
@@ -23,14 +23,16 @@
             <span th:text="${tip.title}">Title</span>
         </td>
         <td>
-            <span th:text="${tip.author}">Author</span>
+            <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
+            <span th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}">Author</span>
         </td>
         <td>
             <input type="checkbox" name="check" value="check"><br>
         </td>
         <td>
-            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id})}" method="post">
-                <input name="Delete" type="submit" value="Delete"/></form>
+            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id},type=${tip.type.name()})}" method="post">
+                <input name="Delete" type="submit" value="Delete"/>
+            </form>
         </td>
     </tr>
     </tbody>

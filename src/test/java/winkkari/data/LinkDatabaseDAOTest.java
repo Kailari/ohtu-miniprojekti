@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class DatabaseDAOTest {
-    private DatabaseDAO dao;
+class LinkDatabaseDAOTest {
+    private LinkDatabaseDAO dao;
     private Connection connection;
-    private DatabaseDAO.ConnectionProvider connectionProvider;
+    private LinkDatabaseDAO.ConnectionProvider connectionProvider;
 
-    private class ConnectionProvider implements DatabaseDAO.ConnectionProvider {
+    private class ConnectionProvider implements LinkDatabaseDAO.ConnectionProvider {
         @Override
         public Connection get() throws SQLException {
             return connection = spy(DriverManager.getConnection("jdbc:h2:test.db"));
@@ -38,13 +38,13 @@ class DatabaseDAOTest {
     @BeforeEach
     void beforeEach() {
         connectionProvider = spy(new ConnectionProvider());
-        dao = new DatabaseDAO(connectionProvider);
+        dao = new LinkDatabaseDAO(connectionProvider);
         reset(connectionProvider);
     }
 
     @Test
     void addingTipWithValidInfoDoesOneQuery() throws SQLException {
-        dao.add(new Tip("test", "test"));
+        dao.add(new LinkTip("test", "test", "test", "test"));
 
         verify(connectionProvider, times(1)).get();
         verify(connection, times(1)).prepareStatement(anyString());
@@ -52,20 +52,22 @@ class DatabaseDAOTest {
 
     @Test
     void afterAddingTipGetAllContainsTheTip() {
-        dao.add(new Tip("testTitle", "testAuthor"));
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
 
         var result = dao.getAll().stream().findFirst().get();
         assertEquals("testTitle", result.getTitle());
-        assertEquals("testAuthor", result.getAuthor());
+        assertEquals("testUrl", result.getUrl());
+        assertEquals("testComment", result.getComment());
     }
 
     @Test
     void afterAddGetReturnsTheCorrectTip() {
-        dao.add(new Tip("testTitle", "testAuthor"));
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
         var added = dao.getAll().stream().findFirst().get();
 
         var result = dao.get(added.getId()).get();
         assertEquals("testTitle", result.getTitle());
-        assertEquals("testAuthor", result.getAuthor());
+        assertEquals("testUrl", result.getUrl());
+        assertEquals("testComment", result.getComment());
     }
 }

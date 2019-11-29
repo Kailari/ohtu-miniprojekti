@@ -12,9 +12,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class DatabaseDAO implements TipDAO {
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseDAO.class);
-    private static final String TABLE_NAME = "TIPS";
+public class BookDatabaseDAO implements TipDAO<BookTip> {
+    private static final Logger LOG = LoggerFactory.getLogger(BookDatabaseDAO.class);
+    private static final String TABLE_NAME = "TIPS_BOOKS";
 
     private final ConnectionProvider connectionProvider;
 
@@ -30,15 +30,19 @@ public class DatabaseDAO implements TipDAO {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/Tips", "", "");
     }
 
-    public DatabaseDAO() {
-        this(DatabaseDAO::defaultConnectionProvider);
+    public BookDatabaseDAO() {
+        this(BookDatabaseDAO::defaultConnectionProvider);
     }
 
-    public DatabaseDAO(ConnectionProvider connectionProvider) {
+    public BookDatabaseDAO(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
 
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME + "(ID SERIAL PRIMARY KEY, TITLE VARCHAR(512), AUTHOR VARCHAR(512));")
+             final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME +
+                                                                 "(ID SERIAL PRIMARY KEY, " +
+                                                                 "TITLE VARCHAR(512), " +
+                                                                 "AUTHOR VARCHAR(512)," +
+                                                                 "ISBN VARCHAR(13));")
         ) {
             statement.execute();
         } catch (SQLException ignored) {
@@ -47,12 +51,13 @@ public class DatabaseDAO implements TipDAO {
     }
 
     @Override
-    public void add(Tip tip) {
+    public void add(BookTip tip) {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("INSERT INTO " + TABLE_NAME + "(TITLE, AUTHOR) VALUES(?,?);")
+             final var statement = conn.prepareStatement("INSERT INTO " + TABLE_NAME + "(TITLE, AUTHOR, ISBN) VALUES(?,?,?);")
         ) {
             statement.setString(1, tip.getTitle());
             statement.setString(2, tip.getAuthor());
+            statement.setString(3, tip.getIsbn());
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Error adding tip: ", e);
@@ -60,9 +65,9 @@ public class DatabaseDAO implements TipDAO {
     }
 
     @Override
-    public Optional<Tip> get(String id) {
+    public Optional<BookTip> get(String id) {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author FROM " + TABLE_NAME + " WHERE ID = ?;")
+             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author, ISBN as isbn FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
             statement.setInt(1, Integer.parseInt(id));
 
@@ -72,7 +77,7 @@ public class DatabaseDAO implements TipDAO {
                 return Optional.empty();
             }
 
-            final Tip tip = new Tip(rs.getString("id"), rs.getString("title"), rs.getString("author"));
+            final BookTip tip = new BookTip(rs.getString("id"), rs.getString("title"), rs.getString("author"), rs.getString("isbn"));
             return Optional.of(tip);
         } catch (SQLException e) {
             LOG.trace("Could not get tip by ID");
@@ -81,16 +86,17 @@ public class DatabaseDAO implements TipDAO {
     }
 
     @Override
-    public Collection<Tip> getAll() {
+    public Collection<BookTip> getAll() {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author FROM " + TABLE_NAME)
+             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, AUTHOR as author, ISBN as isbn FROM " + TABLE_NAME)
         ) {
             final ResultSet rs = statement.executeQuery();
-            final List<Tip> foundTips = new ArrayList<>();
+            final List<BookTip> foundTips = new ArrayList<>();
             while (rs.next()) {
-                foundTips.add(new Tip(rs.getString("id"),
-                                      rs.getString("title"),
-                                      rs.getString("author")));
+                foundTips.add(new BookTip(rs.getString("id"),
+                                          rs.getString("title"),
+                                          rs.getString("author"),
+                                          rs.getString("isbn")));
             }
             return foundTips;
         } catch (SQLException e) {
@@ -104,7 +110,7 @@ public class DatabaseDAO implements TipDAO {
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
-            statement.setInt(1, Integer.valueOf(id));
+            statement.setInt(1, Integer.parseInt(id));
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Error deleting database entry: ", e);

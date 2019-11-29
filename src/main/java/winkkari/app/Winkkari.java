@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import winkkari.data.Tip;
-import winkkari.data.TipDAO;
+import winkkari.data.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -14,10 +13,14 @@ import java.util.Optional;
 public class Winkkari {
     private static final Logger LOG = LoggerFactory.getLogger(Winkkari.class);
 
-    private final TipDAO tipDAO;
+    private final TipDAO<BookTip> bookTipDAO;
+    private final TipDAO<LinkTip> linkTipDAO;
+    private final AllTipsDAO genericDAO;
 
-    public Winkkari(TipDAO tipDAO) {
-        this.tipDAO = tipDAO;
+    public Winkkari(TipDAO<BookTip> bookTipDAO, TipDAO<LinkTip> linkTipDAO) {
+        this.bookTipDAO = bookTipDAO;
+        this.linkTipDAO = linkTipDAO;
+        this.genericDAO = new AllTipsDAO(bookTipDAO, linkTipDAO);
     }
 
     public void run() {
@@ -34,7 +37,7 @@ public class Winkkari {
         ), "index"), new ThymeleafTemplateEngine());
 
         Spark.get("/list", (req, res) -> new ModelAndView(Map.ofEntries(
-                Map.entry("tips", tipDAO.getAll())
+                Map.entry("tips", genericDAO.getAll())
         ), "list"), new ThymeleafTemplateEngine());
 
         Spark.get("/new", (req, res) -> new ModelAndView(Map.ofEntries(
@@ -58,14 +61,15 @@ public class Winkkari {
                 return res;
             }
 
-            tipDAO.add(new Tip(title, author));
+            // TODO: ISBN
+            bookTipDAO.add(new BookTip(title, author, ""));
 
             res.redirect("/list");
             return res;
         });
 
         Spark.post("/api/tip/delete/:id", (req, res) -> {
-            tipDAO.delete(req.params(":id"));
+            genericDAO.delete(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"));
             res.redirect("/list");
             return res;
         });
