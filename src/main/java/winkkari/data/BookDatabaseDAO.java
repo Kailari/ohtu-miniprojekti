@@ -41,8 +41,9 @@ public class BookDatabaseDAO implements TipDAO<BookTip> {
              final var statement = conn.prepareStatement("CREATE TABLE " + TABLE_NAME +
                                                                  "(ID SERIAL PRIMARY KEY, " +
                                                                  "TITLE VARCHAR(512), " +
-                                                                 "AUTHOR VARCHAR(512)," +
-                                                                 "ISBN VARCHAR(13));")
+                                                                 "AUTHOR VARCHAR(512), " +
+                                                                 "ISBN VARCHAR(13), " +
+                                                                 "CHECKED VARCHAR(1));")
         ) {
             statement.execute();
         } catch (SQLException ignored) {
@@ -114,6 +115,25 @@ public class BookDatabaseDAO implements TipDAO<BookTip> {
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Error deleting database entry: ", e);
+        }
+    }
+
+    @Override
+    public void check(String id, String check) {
+        String newCheck = "";
+        if (check.equals("0")){
+            newCheck = "1";
+        }else{
+            newCheck = "0";
+        }
+        try (final var conn = getConnection();
+             final var statement = conn.prepareStatement("UPDATE " + TABLE_NAME + " SET CHECKED=? WHERE ID = ?;")
+        ) {
+            statement.setString(1, newCheck);
+            statement.setInt(1, Integer.parseInt(id));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Error updating database entry: ", e);
         }
     }
 

@@ -26,8 +26,15 @@
             <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
             <span th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}">Author</span>
         </td>
-        <td>
-            <input type="checkbox" name="check" value="check"><br>
+        <td th:if="${tip.check == '1'}">
+            <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()}, check=${tip.check})}" method="post">
+                <input name="Check" type="submit" value="Checked!"/>
+            </form> 
+        </td>
+        <td th:unless="${tip.check == '0'}"> 
+            <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()}, check=${tip.check})}" method="post">
+                <input name="Check" type="submit" value="Not yet checked"/>
+            </form> 
         </td>
         <td>
             <form th:action="@{~/api/tip/delete/{id}(id=${tip.id},type=${tip.type.name()})}" method="post">

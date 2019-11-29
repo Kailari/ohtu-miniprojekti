@@ -7,6 +7,7 @@ package winkkari.data;
 public abstract class Tip {
     private final String id;
     private final String title;
+    public String check;
 
     /** Allows the frontend to differentiate between types of tips. */
     private transient final Type type;
@@ -18,11 +19,13 @@ public abstract class Tip {
      * @param type  The type of this tip. Subclasses should set this accordingly
      * @param id    The id of this tip
      * @param title The title of this tip
+     * @param check The value that says if a tip is checked
      */
     protected Tip(Type type, String id, String title) {
         this.type = type;
         this.id = id;
         this.title = title;
+        this.check = "0";
     }
 
     /**
@@ -36,6 +39,7 @@ public abstract class Tip {
         this.type = type;
         this.id = null;
         this.title = title;
+        this.check = "0";
     }
 
     /**
@@ -64,6 +68,10 @@ public abstract class Tip {
      */
     public String getTitle() {
         return title;
+    }
+
+    public String getCheck() {
+        return check;
     }
 
     public enum Type {

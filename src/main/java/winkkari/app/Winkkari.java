@@ -74,6 +74,13 @@ public class Winkkari {
             return res;
         });
 
+        Spark.post("/api/tip/check/:id", (req, res) -> {
+            String check = req.queryParams("check");
+            genericDAO.check(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"), check);
+            res.redirect("/list");
+            return res;
+        });
+
         LOG.info("Winkkari initialization finished.");
 
         // Block until Spark is finished

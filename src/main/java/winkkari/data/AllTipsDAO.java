@@ -73,4 +73,24 @@ public class AllTipsDAO implements TipDAO<Tip> {
                 throw new UnsupportedOperationException("Not implemented!");
         }
     }
+
+    @Override
+    @Deprecated
+    public void check(String id, String check) {
+        throw new UnsupportedOperationException("Cannot remove by ID from generic DAO. Use specific DAO or type-sensitive overload!");
+    }
+    
+    public void check(Tip.Type type, String id, String check) {
+        switch (type) {
+            case BOOK:
+                bookDAO.check(id, check);
+                break;
+            case LINK:
+                linkDAO.check(id, check);
+                break;
+            default:
+            case VIDEO:
+                throw new UnsupportedOperationException("Not implemented!");
+        }
+    }
 }

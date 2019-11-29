@@ -42,6 +42,7 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
                                                                  "(ID SERIAL PRIMARY KEY, " +
                                                                  "TITLE VARCHAR(512), " +
                                                                  "URL VARCHAR(512), " +
+                                                                 "CHECKED VARCHAR(1), " +
                                                                  "COMMENT VARCHAR (512));")
         ) {
             statement.execute();
@@ -114,6 +115,19 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Error deleting database entry: ", e);
+        }
+    }
+
+    @Override
+    public void check(String id, String check) {
+        try (final var conn = getConnection();
+             final var statement = conn.prepareStatement("UPDATE FROM " + TABLE_NAME + " SET CHECKED=? WHERE ID = ?;")
+        ) {
+            statement.setString(1, check);
+            statement.setInt(2, Integer.parseInt(id));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Error updating database entry: ", e);
         }
     }
 

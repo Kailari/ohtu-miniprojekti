@@ -11,4 +11,7 @@ public interface TipDAO<TTip extends Tip> {
     Collection<TTip> getAll();
 
     void delete(String id);
+
+    void check(String id, String check);
+    
 }
