@@ -24,16 +24,19 @@
         </td>
         <td>
             <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
-            <span th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}">Author</span>
+            <span th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}">URL</span>
+            <span th:if="${tip.type.name() == 'VIDEO'}" th:text="${tip.url}">URL</span>
         </td>
         <td>
-            <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()},check=${tip.check})}" method="post">
+            <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()},check=${tip.check})}"
+                  method="post">
                 <input th:if="${tip.check}" name="Check" type="submit" value="Checked!"/>
                 <input th:unless="${tip.check}" name="Check" type="submit" value="Not yet checked"/>
             </form>
         </td>
         <td>
-            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id},type=${tip.type.name()})}" method="post">
+            <form th:action="@{~/api/tip/delete/{id}(id=${tip.id},type=${tip.type.name()})}"
+                  method="post">
                 <input name="Delete" type="submit" value="Delete"/>
             </form>
         </td>
