@@ -11,7 +11,7 @@ public class TestLinkTipDAO implements TipDAO<LinkTip> {
     @Override
     public void add(LinkTip tip) {
         var id = UUID.randomUUID().toString();
-        tips.put(id, new LinkTip(id, tip.getTitle(), tip.getUrl(), tip.getComment()));
+        tips.put(id, new LinkTip(id, tip.getTitle(), tip.getUrl(), tip.getComment(), false));
     }
 
     @Override
@@ -27,5 +27,11 @@ public class TestLinkTipDAO implements TipDAO<LinkTip> {
     @Override
     public void delete(String id) {
         tips.remove(id);
+    }
+
+    @Override
+    public void check(String id, boolean check) {
+        var tip = tips.get(id);
+        tips.put(id, new LinkTip(id, tip.getTitle(), tip.getUrl(), tip.getComment(), !tip.getCheck()));
     }
 }

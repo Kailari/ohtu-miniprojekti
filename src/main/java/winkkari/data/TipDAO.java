@@ -12,6 +12,6 @@ public interface TipDAO<TTip extends Tip> {
 
     void delete(String id);
 
-    void check(String id, String check);
+    void check(String id, boolean check);
     
 }

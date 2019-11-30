@@ -44,7 +44,7 @@ class LinkDatabaseDAOTest {
 
     @Test
     void addingTipWithValidInfoDoesOneQuery() throws SQLException {
-        dao.add(new LinkTip("test", "test", "test", "test"));
+        dao.add(new LinkTip("test", "test", "test"));
 
         verify(connectionProvider, times(1)).get();
         verify(connection, times(1)).prepareStatement(anyString());

@@ -7,8 +7,8 @@ public class BookTip extends Tip {
     private final String author;
     private final String isbn;
 
-    public BookTip(String id, String title, String author, String isbn) {
-        super(Type.BOOK, id, title);
+    public BookTip(String id, String title, String author, String isbn, boolean check) {
+        super(Type.BOOK, id, title, check);
         this.author = author;
         this.isbn = isbn;
     }

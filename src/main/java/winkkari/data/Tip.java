@@ -7,7 +7,7 @@ package winkkari.data;
 public abstract class Tip {
     private final String id;
     private final String title;
-    public String check;
+    private final boolean check;
 
     /** Allows the frontend to differentiate between types of tips. */
     private transient final Type type;
@@ -21,11 +21,11 @@ public abstract class Tip {
      * @param title The title of this tip
      * @param check The value that says if a tip is checked
      */
-    protected Tip(Type type, String id, String title) {
+    protected Tip(Type type, String id, String title, boolean check) {
         this.type = type;
         this.id = id;
         this.title = title;
-        this.check = "0";
+        this.check = check;
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class Tip {
         this.type = type;
         this.id = null;
         this.title = title;
-        this.check = "0";
+        this.check = false;
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class Tip {
         return title;
     }
 
-    public String getCheck() {
+    public boolean getCheck() {
         return check;
     }
 

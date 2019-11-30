@@ -4,8 +4,8 @@ public class LinkTip extends Tip {
     private final String url;
     private final String comment;
 
-    public LinkTip(String id, String title, String url, String comment) {
-        super(Type.LINK, id, title);
+    public LinkTip(String id, String title, String url, String comment, boolean check) {
+        super(Type.LINK, id, title, check);
         this.url = url;
         this.comment = comment;
     }

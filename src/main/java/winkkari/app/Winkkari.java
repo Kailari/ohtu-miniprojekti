@@ -76,7 +76,9 @@ public class Winkkari {
 
         Spark.post("/api/tip/check/:id", (req, res) -> {
             String check = req.queryParams("check");
-            genericDAO.check(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"), check);
+            boolean checked = Boolean.parseBoolean(check);
+            LOG.info("Checking: {} ({})", check, checked);
+            genericDAO.check(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"), checked);
             res.redirect("/list");
             return res;
         });

@@ -42,8 +42,8 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
                                                                  "(ID SERIAL PRIMARY KEY, " +
                                                                  "TITLE VARCHAR(512), " +
                                                                  "URL VARCHAR(512), " +
-                                                                 "CHECKED VARCHAR(1), " +
-                                                                 "COMMENT VARCHAR (512));")
+                                                                 "COMMENT VARCHAR(512), " +
+                                                                 "CHECKED INTEGER);")
         ) {
             statement.execute();
         } catch (SQLException ignored) {
@@ -68,7 +68,7 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
     @Override
     public Optional<LinkTip> get(String id) {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, URL as url, COMMENT as comment FROM " + TABLE_NAME + " WHERE ID = ?;")
+             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, URL as url, COMMENT as comment, CHECKED as checked FROM " + TABLE_NAME + " WHERE ID = ?;")
         ) {
             statement.setInt(1, Integer.parseInt(id));
 
@@ -78,7 +78,11 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
                 return Optional.empty();
             }
 
-            final LinkTip tip = new LinkTip(rs.getString("id"), rs.getString("title"), rs.getString("url"), rs.getString("comment"));
+            final LinkTip tip = new LinkTip(rs.getString("id"),
+                                            rs.getString("title"),
+                                            rs.getString("url"),
+                                            rs.getString("comment"),
+                                            rs.getBoolean("checked"));
             return Optional.of(tip);
         } catch (SQLException e) {
             LOG.trace("Could not get tip by ID");
@@ -89,7 +93,7 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
     @Override
     public Collection<LinkTip> getAll() {
         try (final var conn = getConnection();
-             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, URL as url, COMMENT as comment FROM " + TABLE_NAME)
+             final var statement = conn.prepareStatement("SELECT ID as id, TITLE as title, URL as url, COMMENT as comment, CHECKED as checked  FROM " + TABLE_NAME)
         ) {
             final ResultSet rs = statement.executeQuery();
             final List<LinkTip> foundTips = new ArrayList<>();
@@ -97,7 +101,8 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
                 foundTips.add(new LinkTip(rs.getString("id"),
                                           rs.getString("title"),
                                           rs.getString("url"),
-                                          rs.getString("comment")));
+                                          rs.getString("comment"),
+                                          rs.getBoolean("checked")));
             }
             return foundTips;
         } catch (SQLException e) {
@@ -119,11 +124,11 @@ public class LinkDatabaseDAO implements TipDAO<LinkTip> {
     }
 
     @Override
-    public void check(String id, String check) {
+    public void check(String id, boolean check) {
         try (final var conn = getConnection();
              final var statement = conn.prepareStatement("UPDATE FROM " + TABLE_NAME + " SET CHECKED=? WHERE ID = ?;")
         ) {
-            statement.setString(1, check);
+            statement.setBoolean(1, !check);
             statement.setInt(2, Integer.parseInt(id));
             statement.executeUpdate();
         } catch (SQLException e) {

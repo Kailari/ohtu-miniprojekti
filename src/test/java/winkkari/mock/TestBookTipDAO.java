@@ -11,7 +11,7 @@ public class TestBookTipDAO implements TipDAO<BookTip> {
     @Override
     public void add(BookTip tip) {
         var id = UUID.randomUUID().toString();
-        tips.put(id, new BookTip(id, tip.getTitle(), tip.getAuthor(), tip.getIsbn()));
+        tips.put(id, new BookTip(id, tip.getTitle(), tip.getAuthor(), tip.getIsbn(), false));
     }
 
     @Override
@@ -27,5 +27,12 @@ public class TestBookTipDAO implements TipDAO<BookTip> {
     @Override
     public void delete(String id) {
         tips.remove(id);
+    }
+
+
+    @Override
+    public void check(String id, boolean check) {
+        var tip = tips.get(id);
+        tips.put(id, new BookTip(id, tip.getTitle(), tip.getAuthor(), tip.getIsbn(), !tip.getCheck()));
     }
 }

@@ -76,11 +76,11 @@ public class AllTipsDAO implements TipDAO<Tip> {
 
     @Override
     @Deprecated
-    public void check(String id, String check) {
+    public void check(String id, boolean check) {
         throw new UnsupportedOperationException("Cannot remove by ID from generic DAO. Use specific DAO or type-sensitive overload!");
     }
     
-    public void check(Tip.Type type, String id, String check) {
+    public void check(Tip.Type type, String id, boolean check) {
         switch (type) {
             case BOOK:
                 bookDAO.check(id, check);
