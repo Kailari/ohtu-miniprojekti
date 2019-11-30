@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class BookDatabaseDAOTest {
-    private BookDatabaseDAO dao;
+class VideoDatabaseDAOTest {
+    private VideoDatabaseDAO dao;
     private Connection connection;
-    private BookDatabaseDAO.ConnectionProvider connectionProvider;
+    private AbstractDatabaseDAO.ConnectionProvider connectionProvider;
 
     private class ConnectionProvider implements AbstractDatabaseDAO.ConnectionProvider {
         @Override
@@ -38,13 +38,13 @@ class BookDatabaseDAOTest {
     @BeforeEach
     void beforeEach() {
         connectionProvider = spy(new ConnectionProvider());
-        dao = new BookDatabaseDAO(connectionProvider);
+        dao = new VideoDatabaseDAO(connectionProvider);
         reset(connectionProvider);
     }
 
     @Test
     void addingTipWithValidInfoDoesOneQuery() throws SQLException {
-        dao.add(new BookTip("test", "test", "isbn"));
+        dao.add(new VideoTip("test", "test", "test"));
 
         verify(connectionProvider, times(1)).get();
         verify(connection, times(1)).prepareStatement(anyString());
@@ -52,22 +52,22 @@ class BookDatabaseDAOTest {
 
     @Test
     void afterAddingTipGetAllContainsTheTip() {
-        dao.add(new BookTip("testTitle", "testAuthor", "testIsbn"));
+        dao.add(new VideoTip("testTitle", "testUrl", "testComment"));
 
         var result = dao.getAll().stream().findFirst().get();
         assertEquals("testTitle", result.getTitle());
-        assertEquals("testAuthor", result.getAuthor());
-        assertEquals("testIsbn", result.getIsbn());
+        assertEquals("testUrl", result.getUrl());
+        assertEquals("testComment", result.getComment());
     }
 
     @Test
     void afterAddGetReturnsTheCorrectTip() {
-        dao.add(new BookTip("testTitle", "testAuthor", "testIsbn"));
+        dao.add(new VideoTip("testTitle", "testUrl", "testComment"));
         var added = dao.getAll().stream().findFirst().get();
 
         var result = dao.get(added.getId()).get();
         assertEquals("testTitle", result.getTitle());
-        assertEquals("testAuthor", result.getAuthor());
-        assertEquals("testIsbn", result.getIsbn());
+        assertEquals("testUrl", result.getUrl());
+        assertEquals("testComment", result.getComment());
     }
 }

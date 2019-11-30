@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import winkkari.app.Winkkari;
 import winkkari.data.BookDatabaseDAO;
 import winkkari.data.LinkDatabaseDAO;
+import winkkari.data.VideoDatabaseDAO;
 
 public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
@@ -13,7 +14,8 @@ public class Main {
         LOG.trace("Starting...");
         final var bookDatabaseDAO = new BookDatabaseDAO();
         final var linkDatabaseDAO = new LinkDatabaseDAO();
-        final var winkkari = new Winkkari(bookDatabaseDAO, linkDatabaseDAO);
+        final var videoDatabaseDAO = new VideoDatabaseDAO();
+        final var winkkari = new Winkkari(bookDatabaseDAO, linkDatabaseDAO, videoDatabaseDAO);
 
         LOG.trace("Running...");
         winkkari.run();

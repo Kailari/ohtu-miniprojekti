@@ -15,12 +15,18 @@ public class Winkkari {
 
     private final TipDAO<BookTip> bookTipDAO;
     private final TipDAO<LinkTip> linkTipDAO;
+    private final TipDAO<VideoTip> videoTipDAO;
     private final AllTipsDAO genericDAO;
 
-    public Winkkari(TipDAO<BookTip> bookTipDAO, TipDAO<LinkTip> linkTipDAO) {
+    public Winkkari(
+            TipDAO<BookTip> bookTipDAO,
+            TipDAO<LinkTip> linkTipDAO,
+            TipDAO<VideoTip> videoTipDAO
+    ) {
         this.bookTipDAO = bookTipDAO;
         this.linkTipDAO = linkTipDAO;
-        this.genericDAO = new AllTipsDAO(bookTipDAO, linkTipDAO);
+        this.videoTipDAO = videoTipDAO;
+        this.genericDAO = new AllTipsDAO(bookTipDAO, linkTipDAO, videoTipDAO);
     }
 
     public void run() {

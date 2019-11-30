@@ -5,15 +5,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
-    private static final String TABLE_NAME = "TIPS_LINKS";
+public class VideoDatabaseDAO extends AbstractDatabaseDAO<VideoTip> {
+    private static final String TABLE_NAME = "TIPS_VIDEOS";
 
-    public LinkDatabaseDAO() {
+    public VideoDatabaseDAO() {
         super();
     }
 
-    public LinkDatabaseDAO(ConnectionProvider connectionProvider) {
+    public VideoDatabaseDAO(ConnectionProvider connectionProvider) {
         super(connectionProvider);
+    }
+
+    @Override
+    protected VideoTip constructFromResultSet(ResultSet rs) throws SQLException {
+        return new VideoTip(rs.getString("id"),
+                            rs.getString("title"),
+                            rs.getString("url"),
+                            rs.getString("comment"),
+                            rs.getBoolean("checked"));
     }
 
     @Override
@@ -28,7 +37,7 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
     }
 
     @Override
-    protected PreparedStatement getAddQuery(Connection conn, LinkTip tip) throws SQLException {
+    protected PreparedStatement getAddQuery(Connection conn, VideoTip tip) throws SQLException {
         var statement = conn.prepareStatement(
                 "INSERT INTO " + TABLE_NAME +
                         "(TITLE, URL, COMMENT) " +
@@ -66,15 +75,6 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
                         "COMMENT as comment, " +
                         "CHECKED as checked " +
                         "FROM " + TABLE_NAME);
-    }
-
-    @Override
-    protected LinkTip constructFromResultSet(ResultSet rs) throws SQLException {
-        return new LinkTip(rs.getString("id"),
-                           rs.getString("title"),
-                           rs.getString("url"),
-                           rs.getString("comment"),
-                           rs.getBoolean("checked"));
     }
 
     @Override

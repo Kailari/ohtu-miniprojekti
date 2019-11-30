@@ -1,23 +1,19 @@
 package winkkari;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 
-import java.sql.SQLOutput;
 import java.util.Random;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class Stepdefs {
     private WebDriver driver;
@@ -115,7 +111,7 @@ public class Stepdefs {
     public void userDeletesTip() {
         sleep(10);
         WebElement element = driver.findElement(By.xpath(
-            "//table/tbody/tr[td[span[text()='Testi2']]]/td[4]/form/input"
+                "//table/tbody/tr[td[span[text()='Testi2']]]/td[4]/form/input"
         ));
         System.out.println("TAG IS:   " + element.getTagName());
         element.submit();
@@ -136,6 +132,7 @@ public class Stepdefs {
     public void tipsOfAllTypesWillBeDisplayed() {
         pageHasContent("This is a BookTip");
         pageHasContent("This is a LinkTip");
+        pageHasContent("This is a VideoTip");
     }
 
     @After
@@ -163,9 +160,10 @@ public class Stepdefs {
         element.submit();
     }
 
-    private static void sleep(int n){
-        try{
-            Thread.sleep(n*1000);
-        } catch(Exception e){}
+    private static void sleep(int n) {
+        try {
+            Thread.sleep(n * 1000);
+        } catch (Exception e) {
+        }
     }
 }

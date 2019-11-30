@@ -20,7 +20,7 @@ class LinkDatabaseDAOTest {
     private Connection connection;
     private LinkDatabaseDAO.ConnectionProvider connectionProvider;
 
-    private class ConnectionProvider implements LinkDatabaseDAO.ConnectionProvider {
+    private class ConnectionProvider implements AbstractDatabaseDAO.ConnectionProvider {
         @Override
         public Connection get() throws SQLException {
             return connection = spy(DriverManager.getConnection("jdbc:h2:test.db"));

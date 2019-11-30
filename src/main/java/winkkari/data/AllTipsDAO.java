@@ -7,10 +7,12 @@ import java.util.Optional;
 public class AllTipsDAO implements TipDAO<Tip> {
     private final TipDAO<BookTip> bookDAO;
     private final TipDAO<LinkTip> linkDAO;
+    private final TipDAO<VideoTip> videoDAO;
 
-    public AllTipsDAO(TipDAO<BookTip> bookDAO, TipDAO<LinkTip> linkDAO) {
+    public AllTipsDAO(TipDAO<BookTip> bookDAO, TipDAO<LinkTip> linkDAO, TipDAO<VideoTip> videoDAO) {
         this.bookDAO = bookDAO;
         this.linkDAO = linkDAO;
+        this.videoDAO = videoDAO;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class AllTipsDAO implements TipDAO<Tip> {
                 linkDAO.add((LinkTip) tip);
                 break;
             case VIDEO:
-                throw new UnsupportedOperationException("Not implemented!");
+                videoDAO.add((VideoTip) tip);
         }
     }
 
@@ -32,7 +34,7 @@ public class AllTipsDAO implements TipDAO<Tip> {
         var all = new ArrayList<Tip>();
         all.addAll(bookDAO.getAll());
         all.addAll(linkDAO.getAll());
-        //all.addAll(videoDAO.getAll());
+        all.addAll(videoDAO.getAll());
         return all;
     }
 
@@ -48,9 +50,10 @@ public class AllTipsDAO implements TipDAO<Tip> {
                 return bookDAO.get(id).map(Tip.class::cast);
             case LINK:
                 return linkDAO.get(id).map(Tip.class::cast);
-            default:
             case VIDEO:
-                throw new UnsupportedOperationException("Not implemented!");
+                return videoDAO.get(id).map(Tip.class::cast);
+            default:
+                throw new IllegalArgumentException("Unknown tip type: " + type);
         }
     }
 
@@ -68,9 +71,11 @@ public class AllTipsDAO implements TipDAO<Tip> {
             case LINK:
                 linkDAO.delete(id);
                 break;
-            default:
             case VIDEO:
-                throw new UnsupportedOperationException("Not implemented!");
+                videoDAO.delete(id);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown tip type: " + type);
         }
     }
 
@@ -79,7 +84,7 @@ public class AllTipsDAO implements TipDAO<Tip> {
     public void check(String id, boolean check) {
         throw new UnsupportedOperationException("Cannot remove by ID from generic DAO. Use specific DAO or type-sensitive overload!");
     }
-    
+
     public void check(Tip.Type type, String id, boolean check) {
         switch (type) {
             case BOOK:
@@ -88,9 +93,11 @@ public class AllTipsDAO implements TipDAO<Tip> {
             case LINK:
                 linkDAO.check(id, check);
                 break;
-            default:
             case VIDEO:
-                throw new UnsupportedOperationException("Not implemented!");
+                videoDAO.check(id, check);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown tip type: " + type);
         }
     }
 }
