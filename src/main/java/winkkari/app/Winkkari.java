@@ -9,6 +9,7 @@ import winkkari.data.*;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Winkkari {
     private static final Logger LOG = LoggerFactory.getLogger(Winkkari.class);
@@ -45,6 +46,20 @@ public class Winkkari {
         Spark.get("/list", (req, res) -> new ModelAndView(Map.ofEntries(
                 Map.entry("tips", genericDAO.getAll())
         ), "list"), new ThymeleafTemplateEngine());
+
+        Spark.get("/list/", (req, res) -> {
+            String searchStr = req.queryParams("search");
+
+            if (searchStr.equals("all")) return new ModelAndView(Map.ofEntries(
+                    Map.entry("tips", genericDAO.getAll())
+            ), "list");
+
+            return new ModelAndView(Map.ofEntries(
+                    Map.entry("tips", genericDAO.getAll()
+                            .stream()
+                            .filter(x -> x.getType() == Tip.Type.valueOf(searchStr))
+                            .collect(Collectors.toList()))), "list");
+        }, new ThymeleafTemplateEngine());
 
         Spark.get("/new", (req, res) -> new ModelAndView(Map.ofEntries(
                 // nothing

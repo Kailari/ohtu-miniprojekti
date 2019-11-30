@@ -5,7 +5,19 @@
 </head>
 <body>
 
-<h1>All tips</h1>
+
+<h1>Tips</h1>
+<form th:action="@{~/list/}">
+    <select name="search">
+        <option th:value="'all'" th:text="All" selected></option>
+        <option th:value="'BOOK'" th:text="Books"></option>
+        <option th:value="'LINK'" th:text="Links"></option>
+        <option th:value="'VIDEO'" th:text="Videos"></option>
+    </select>
+    <br><br>
+    <input type="submit" value="Search">
+</form>
+
 <table>
     <thead>
     <tr>
