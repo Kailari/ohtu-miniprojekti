@@ -41,10 +41,24 @@ public class Stepdefs {
         driver.get(baseUrl);
     }
 
-    @Given("User is on the new tip page")
-    public void userIsOnTheNewTipPage() {
+    @Given("User is on the new book page")
+    public void userIsOnTheNewBookTipPage() {
         driver.get(baseUrl);
-        WebElement element = driver.findElement(By.linkText("Add a new tip"));
+        WebElement element = driver.findElement(By.linkText("book tip"));
+        element.click();
+    }
+
+    @Given("User is on the new link page")
+    public void userIsOnTheNewLinkTipPage() {
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("link tip"));
+        element.click();
+    }
+
+    @Given("User is on the new video page")
+    public void userIsOnTheNewVideoTipPage() {
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("video tip"));
         element.click();
     }
 
@@ -55,28 +69,55 @@ public class Stepdefs {
         element.click();
     }
 
-    @Given("User has added a tip")
-    public void userHasAddedTip() {
+    @Given("User has added a book tip with Author {string} and title {string}")
+    public void userHasAddedBookTip(String author, String title) {
         driver.get(baseUrl);
-        WebElement element = driver.findElement(By.linkText("Add a new tip"));
+        WebElement element = driver.findElement(By.linkText("book tip"));
         element.click();
-        createNewTip("Testaaja", "Testi2");
+        createNewBookTip(author + rand, title + rand);
+    }
+
+    @Given("User has added a link tip with title {string}, URL {string} and comment {string}")
+    public void userHasAddedLinkTip(String title, String url, String comment) {
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("link tip"));
+        element.click();
+        createNewLinkTip(title + rand, url, comment);
+    }
+
+    @Given("User has added a video tip with title {string}, URL {string} and comment {string}")
+    public void userHasAddedVideoTip(String title, String url, String comment) {
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("video tip"));
+        element.click();
+        createNewVideoTip(title + rand, url, comment);
     }
 
     @When("Author {string} and title {string} are entered")
     public void authorAndTitleAreEntered(String author, String title) {
-        createNewTip(author + rand, title + rand);
+        createNewBookTip(author + rand, title + rand);
+    }
+
+    @When("Title {string}, URL {string} and comment {string} are entered to create a new link")
+    public void titleUrlAndCommentAreEnteredToCreateLink(String title, String url, String comment) {
+        createNewLinkTip(title + rand, url, comment);
+    }
+
+    @When("Title {string}, URL {string} and comment {string} are entered to create a new video")
+    public void titleUrlAndCommentAreEnteredToCreateVideo(String title, String url, String comment) {
+        createNewVideoTip(title + rand, url, comment);
     }
 
     @Then("New tip is created")
     public void newTipIsCreated() {
+
         sleep(1);
         pageHasContent(Integer.toString(rand));
     }
 
     @When("Empty author and empty title are entered")
     public void emptyAuthorAndEmptyTitleAreEntered() {
-        createNewTip("", "");
+        createNewBookTip("", "");
     }
 
     @Then("New tip is not created and the user is taken to the list page")
@@ -87,12 +128,12 @@ public class Stepdefs {
 
     @When("Empty author and title {string} are entered")
     public void emptyAuthorAndTitleAreEntered(String title) {
-        createNewTip("", title);
+        createNewBookTip("", title);
     }
 
     @When("Author {string} and empty title are entered")
     public void emptyAuthorAndEmptyTitleAreEntered(String author) {
-        createNewTip(author, "");
+        createNewBookTip(author, "");
     }
 
     @When("User wants to check tips and clicks {string}")
@@ -107,19 +148,20 @@ public class Stepdefs {
         pageHasContent("Tips");
     }
 
-    @When("User wants to delete the tip and clicks delete")
-    public void userDeletesTip() {
+    @When("User wants to delete the tip with title {string} and clicks delete")
+    public void userDeletesTip(String title) {
+        sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//table/tbody/tr[td[span[text()='Testi2']]]/td[4]/form/input"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[4]/form/input"
         ));
         System.out.println("TAG IS:   " + element.getTagName());
         element.submit();
     }
 
-    @Then("The tip is deleted")
-    public void tipIsDeleted() {
+    @Then("The tip with title {string} is deleted")
+    public void tipIsDeleted(String title) {
         sleep(1);
-        pageHasNotContent("Testi2");
+        pageHasNotContent(title + rand);
     }
 
     @Given("There are tips of multiple types available")
@@ -133,6 +175,59 @@ public class Stepdefs {
         pageHasContent("This is a LinkTip");
         pageHasContent("This is a VideoTip");
     }
+
+    @When("User chooses to search for books")
+    public void userSearchesForBooks() {
+        sleep(1);
+        WebElement element = driver.findElement(By.xpath(
+                "//body/form/select/option[2]"
+        ));
+        element.click();
+        element = driver.findElement(By.xpath(
+                "//body/form/input"
+        ));
+
+
+        element.submit();
+    }
+
+    @When("User chooses to search for links")
+    public void userSearchesForLinks() {
+        sleep(1);
+        WebElement element = driver.findElement(By.xpath(
+                "//body/form/select/option[3]"
+        ));
+        element.click();
+        element = driver.findElement(By.xpath(
+                "//body/form/input"
+        ));
+
+
+        element.submit();
+    }
+
+    @When("User chooses to search for videos")
+    public void userSearchesForVideos() {
+        sleep(1);
+        WebElement element = driver.findElement(By.xpath(
+                "//body/form/select/option[4]"
+        ));
+        element.click();
+        element = driver.findElement(By.xpath(
+                "//body/form/input"
+        ));
+
+
+        element.submit();
+    }
+
+    @Then("Only the tip with title {string} is shown and not titles {string} and {string}")
+    public void onlySpecifiedTipsAreShown(String title1, String title2, String title3) {
+        pageHasContent(title1 + rand);
+        pageHasNotContent(title2 + rand);
+        pageHasNotContent(title3 + rand);
+    }
+
 
     @After
     public void tearDown() {
@@ -149,8 +244,8 @@ public class Stepdefs {
         assertFalse(driver.getPageSource().contains(content));
     }
 
-    private void createNewTip(String author, String title) {
-        assertTrue(driver.getPageSource().contains("Add new tip"));
+    private void createNewBookTip(String author, String title) {
+        assertTrue(driver.getPageSource().contains("Add a new book tip"));
         WebElement element = driver.findElement(By.name("author"));
         element.sendKeys(author);
         element = driver.findElement(By.name("title"));
@@ -158,6 +253,31 @@ public class Stepdefs {
         element = driver.findElement(By.name("submit"));
         element.submit();
     }
+
+    private void createNewLinkTip(String title, String url, String comment) {
+        assertTrue(driver.getPageSource().contains("Add a new link tip"));
+        WebElement element = driver.findElement(By.name("title"));
+        element.sendKeys(title);
+        element = driver.findElement(By.name("url"));
+        element.sendKeys(url);
+        element = driver.findElement(By.name("comment"));
+        element.sendKeys(comment);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
+    }
+
+    private void createNewVideoTip(String title, String url, String comment) {
+        assertTrue(driver.getPageSource().contains("Add a new video tip"));
+        WebElement element = driver.findElement(By.name("title"));
+        element.sendKeys(title);
+        element = driver.findElement(By.name("url"));
+        element.sendKeys(url);
+        element = driver.findElement(By.name("comment"));
+        element.sendKeys(comment);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
+    }
+
 
     private static void sleep(int n) {
         try {

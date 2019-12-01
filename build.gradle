@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
 }
 
 application {
@@ -60,6 +61,13 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
         stackTraceFilters = []
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
     }
 }
 
