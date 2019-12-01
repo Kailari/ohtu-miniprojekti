@@ -102,4 +102,20 @@ public class BookDatabaseDAO extends AbstractDatabaseDAO<BookTip> {
         statement.setInt(2, Integer.parseInt(id));
         return statement;
     }
+
+    @Override
+    protected PreparedStatement getUpdateQuery(Connection conn, BookTip tip) throws SQLException {
+        var statement = conn.prepareStatement(
+                "UPDATE " + TABLE_NAME +
+                        " SET TITLE = ?," +
+                        " AUTHOR = ?," +
+                        " ISBN = ?" +
+                        " WHERE ID = ?");
+
+        statement.setString(1, tip.getTitle());
+        statement.setString(2, tip.getAuthor());
+        statement.setString(3, tip.getIsbn());
+        statement.setInt(4, Integer.parseInt(tip.getId()));
+        return statement;
+    }
 }

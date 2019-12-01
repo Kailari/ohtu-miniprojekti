@@ -40,6 +40,9 @@
                 <input name="Delete" type="submit" value="Delete"/>
             </form>
         </td>
+        <td>
+            <a th:href="@{~/edit/{id}(id=${tip.id})}">Edit this tip!</a>
+        </td>
     </tr>
     </tbody>
 </table>

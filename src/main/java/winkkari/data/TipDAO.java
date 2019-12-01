@@ -14,4 +14,5 @@ public interface TipDAO<TTip extends Tip> {
 
     void check(String id, boolean check);
     
+    void update(TTip tip);
 }

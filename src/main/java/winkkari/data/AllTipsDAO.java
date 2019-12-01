@@ -100,4 +100,26 @@ public class AllTipsDAO implements TipDAO<Tip> {
                 throw new IllegalArgumentException("Unknown tip type: " + type);
         }
     }
+
+    @Override
+    @Deprecated
+    public void update(Tip tip) {
+        throw new UnsupportedOperationException("Cannot update from generic DAO. Use specific DAO or type-sensitive overload!");
+    }
+
+    public void update(Tip.Type type, Tip tip) {
+        switch (type) {
+            case BOOK:
+                bookDAO.update((BookTip) tip);
+                break;
+            case LINK:
+                linkDAO.update((LinkTip) tip);
+                break;
+            case VIDEO:
+                videoDAO.update((VideoTip) tip);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown tip type: " + type);
+        }
+    }
 }

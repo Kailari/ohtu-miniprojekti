@@ -104,4 +104,20 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
         statement.setInt(2, Integer.parseInt(id));
         return statement;
     }
+
+    @Override
+    protected PreparedStatement getUpdateQuery(Connection conn, LinkTip tip) throws SQLException {
+        var statement = conn.prepareStatement(
+                "UPDATE " + TABLE_NAME +
+                        " SET TITLE = ?," +
+                        " SET URL = ?," +
+                        " SET COMMENT = ?" +
+                        " WHERE ID = ?");
+
+        statement.setString(1, tip.getTitle());
+        statement.setString(2, tip.getUrl());
+        statement.setString(3, tip.getComment());
+        statement.setInt(4, Integer.parseInt(tip.getId()));
+        return statement;
+    }
 }

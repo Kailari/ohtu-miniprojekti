@@ -66,6 +66,11 @@ public abstract class AbstractDatabaseDAO<TTip extends Tip> implements TipDAO<TT
             boolean check
     ) throws SQLException;
 
+    protected abstract PreparedStatement getUpdateQuery(
+            Connection conn,
+            TTip tip
+    ) throws SQLException;
+
     protected abstract TTip constructFromResultSet(ResultSet rs) throws SQLException;
 
     @Override
@@ -131,6 +136,17 @@ public abstract class AbstractDatabaseDAO<TTip extends Tip> implements TipDAO<TT
     public void check(String id, boolean check) {
         try (final var conn = getConnection();
              final var statement = getCheckQuery(conn, id, check)
+        ) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Error updating database row: ", e);
+        }
+    }
+
+    @Override
+    public void update(TTip tip) {
+        try (final var conn = getConnection();
+             final var statement = getUpdateQuery(conn, tip)
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {

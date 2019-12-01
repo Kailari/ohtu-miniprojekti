@@ -6,6 +6,7 @@ import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import winkkari.data.*;
+import winkkari.data.Tip.Type;
 
 import java.util.Map;
 import java.util.Optional;
@@ -50,6 +51,9 @@ public class Winkkari {
                 // nothing
         ), "new"), new ThymeleafTemplateEngine());
 
+        Spark.get("/edit/:id", (req, res) -> new ModelAndView(Map.ofEntries(
+                Map.entry("tip", genericDAO.get(Type.BOOK, req.params(":id")).get())
+        ), "edit"), new ThymeleafTemplateEngine());
 
         Spark.post("/api/tip/new", (req, res) -> {
             final String author = req.queryParams("author");
@@ -85,6 +89,16 @@ public class Winkkari {
             boolean checked = Boolean.parseBoolean(check);
             LOG.info("Checking: {} ({})", check, checked);
             genericDAO.check(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"), checked);
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.post("/api/tip/edit/:id", (req, res) -> {
+            String title = req.queryParams("title");
+            String author = req.queryParams("author");
+            String check = req.queryParams("checked");
+            boolean checked = Boolean.parseBoolean(check);
+            genericDAO.update(Type.BOOK, new BookTip(req.params(":id"), title, author, "", checked));
             res.redirect("/list");
             return res;
         });
