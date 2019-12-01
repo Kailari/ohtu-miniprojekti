@@ -53,7 +53,9 @@
             </form>
         </td>
         <td>
-            <a th:href="@{~/edit/{id}(id=${tip.id})}">Edit this tip!</a>
+            <a th:if="${tip.type.name() == 'BOOK'}" th:href="@{~/editbook/{id}(id=${tip.id})}">Edit this Booktip!</a>
+            <a th:if="${tip.type.name() == 'LINK'}" th:href="@{~/editlink/{id}(id=${tip.id})}">Edit this Linktip!</a>
+            <a th:if="${tip.type.name() == 'VIDEO'}" th:href="@{~/editvideo/{id}(id=${tip.id})}">Edit this Videotip!</a>
         </td>
     </tr>
     </tbody>

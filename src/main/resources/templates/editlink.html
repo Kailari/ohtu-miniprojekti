@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Winkkari</title>
+</head>
+<body>
+
+<h1>Edit linktip</h1>
+
+<span th:text="${tip.title}">title</span>
+<form th:action="@{~/api/tip/editlink/{id}(id=${tip.id})}" method="POST">
+    Title: <br/>
+    <input type="text" name="title" th:value="${tip.title}"/><br/>
+    URL: <br/>
+    <input type="text" name="url" th:value="${tip.url}"/><br/>
+    Comment: <br/>
+    <input type="text" name="comment" th:value="${tip.comment}"/><br/>
+    <br/>
+    <input type="submit" name="submit"/>
+</form>
+
+</body>
+</html>

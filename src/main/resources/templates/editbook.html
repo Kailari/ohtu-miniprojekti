@@ -5,10 +5,10 @@
 </head>
 <body>
 
-<h1>Edit tip</h1>
+<h1>Edit booktip</h1>
 
 <span th:text="${tip.title}">title</span>
-<form th:action="@{~/api/tip/edit/{id}(id=${tip.id})}" method="POST">
+<form th:action="@{~/api/tip/editbook/{id}(id=${tip.id})}" method="POST">
     Author: <br/>
     <input type="text" name="author" th:value="${tip.author}"/><br/>
     Title: <br/>

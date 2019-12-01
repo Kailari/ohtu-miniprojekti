@@ -66,9 +66,17 @@ public class Winkkari {
                 // nothing
         ), "newbook"), new ThymeleafTemplateEngine());
 
-        Spark.get("/edit/:id", (req, res) -> new ModelAndView(Map.ofEntries(
-                Map.entry("tip", genericDAO.get(Type.BOOK, req.params(":id")).get())
-        ), "edit"), new ThymeleafTemplateEngine());
+        Spark.get("/editbook/:id", (req, res) -> new ModelAndView(Map.ofEntries(
+            Map.entry("tip", genericDAO.get(Type.BOOK, req.params(":id")).get())
+        ), "editbook"), new ThymeleafTemplateEngine());
+
+        Spark.get("/editlink/:id", (req, res) -> new ModelAndView(Map.ofEntries(
+            Map.entry("tip", genericDAO.get(Type.LINK, req.params(":id")).get())
+        ), "editlink"), new ThymeleafTemplateEngine());
+
+        Spark.get("/editvideo/:id", (req, res) -> new ModelAndView(Map.ofEntries(
+            Map.entry("tip", genericDAO.get(Type.VIDEO, req.params(":id")).get())
+        ), "editvideo"), new ThymeleafTemplateEngine());
 
         Spark.post("/api/tip/newbook", (req, res) -> {
             final String author = req.queryParams("author");
@@ -178,6 +186,38 @@ public class Winkkari {
             String check = req.queryParams("checked");
             boolean checked = Boolean.parseBoolean(check);
             genericDAO.update(Type.BOOK, new BookTip(req.params(":id"), title, author, "", checked));
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.post("/api/tip/editbook/:id", (req, res) -> {
+            String title = req.queryParams("title");
+            String author = req.queryParams("author");
+            String check = req.queryParams("checked");
+            boolean checked = Boolean.parseBoolean(check);
+            genericDAO.update(Type.BOOK, new BookTip(req.params(":id"), title, author, "", checked));
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.post("/api/tip/editlink/:id", (req, res) -> {
+            String title = req.queryParams("title");
+            String url = req.queryParams("url");
+            String comment = req.queryParams("comment");
+            String check = req.queryParams("checked");
+            boolean checked = Boolean.parseBoolean(check);
+            genericDAO.update(Type.LINK, new LinkTip(req.params(":id"), title, url, comment, checked));
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.post("/api/tip/editvideo/:id", (req, res) -> {
+            String title = req.queryParams("title");
+            String url = req.queryParams("url");
+            String comment = req.queryParams("comment");
+            String check = req.queryParams("checked");
+            boolean checked = Boolean.parseBoolean(check);
+            genericDAO.update(Type.VIDEO, new VideoTip(req.params(":id"), title, url, comment, checked));
             res.redirect("/list");
             return res;
         });

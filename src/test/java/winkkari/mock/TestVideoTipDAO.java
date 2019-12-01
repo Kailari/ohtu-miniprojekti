@@ -34,4 +34,9 @@ public class TestVideoTipDAO implements TipDAO<VideoTip> {
         var tip = tips.get(id);
         tips.put(id, new VideoTip(id, tip.getTitle(), tip.getUrl(), tip.getComment(), !tip.getCheck()));
     }
+
+    @Override
+    public void update(VideoTip tip) {
+        tips.replace(tip.getId(), tip);
+    }
 }

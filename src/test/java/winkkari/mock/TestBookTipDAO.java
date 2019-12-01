@@ -29,10 +29,14 @@ public class TestBookTipDAO implements TipDAO<BookTip> {
         tips.remove(id);
     }
 
-
     @Override
     public void check(String id, boolean check) {
         var tip = tips.get(id);
         tips.put(id, new BookTip(id, tip.getTitle(), tip.getAuthor(), tip.getIsbn(), !tip.getCheck()));
+    }
+
+    @Override
+    public void update(BookTip tip) {
+        tips.replace(tip.getId(), tip);
     }
 }

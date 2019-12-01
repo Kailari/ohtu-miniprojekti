@@ -34,4 +34,9 @@ public class TestLinkTipDAO implements TipDAO<LinkTip> {
         var tip = tips.get(id);
         tips.put(id, new LinkTip(id, tip.getTitle(), tip.getUrl(), tip.getComment(), !tip.getCheck()));
     }
+
+    @Override
+    public void update(LinkTip tip) {
+        tips.replace(tip.getId(), tip);
+    }
 }

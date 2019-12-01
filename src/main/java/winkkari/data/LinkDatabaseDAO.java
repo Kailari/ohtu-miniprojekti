@@ -110,8 +110,8 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
         var statement = conn.prepareStatement(
                 "UPDATE " + TABLE_NAME +
                         " SET TITLE = ?," +
-                        " SET URL = ?," +
-                        " SET COMMENT = ?" +
+                        " URL = ?," +
+                        " COMMENT = ?" +
                         " WHERE ID = ?");
 
         statement.setString(1, tip.getTitle());

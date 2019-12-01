@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -29,6 +30,7 @@ public class Stepdefs {
         );
         driver = new ChromeDriver();
         */
+        //driver = new ChromeDriver();
         //driver = new FirefoxDriver();
         driver = new HtmlUnitDriver();
 
@@ -91,6 +93,75 @@ public class Stepdefs {
         WebElement element = driver.findElement(By.linkText("video tip"));
         element.click();
         createNewVideoTip(title + rand, url, comment);
+    }
+
+    @Given("User has clicked edit button next to booktip")
+    public void userHasClickedBookEditButton() {
+        WebElement element = driver.findElement(By.linkText("Edit this Booktip!"));
+        element.click();
+        sleep(2);
+    }
+
+    @Given("User has clicked edit button next to linktip")
+    public void userHasClickedLinkEditButton() {
+        WebElement element = driver.findElement(By.linkText("Edit this Linktip!"));
+        element.click();
+        sleep(2);
+    }
+
+    @Given("User has clicked edit button next to videotip")
+    public void userHasClickedVideoEditButton() {
+        WebElement element = driver.findElement(By.linkText("Edit this Videotip!"));
+        element.click();
+        sleep(2);
+    }
+
+    @When("User edits author to {string} and title to {string} and clicks submit")
+    public void userEditsBookTip(String author, String title) {
+        WebElement element = driver.findElement(By.name("author"));
+        element.clear();
+        element.sendKeys(author);
+        element = driver.findElement(By.name("title"));
+        element.clear();
+        element.sendKeys(title);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
+    }
+
+    @When("User edits link title to {string}, url to {string} and comment to {string} and clicks submit")
+    public void userEditsLinkTip(String title, String url, String comment) {
+        WebElement element = driver.findElement(By.name("title"));
+        element.clear();
+        element.sendKeys(title);
+        element = driver.findElement(By.name("url"));
+        element.clear();
+        element.sendKeys(url);
+        element = driver.findElement(By.name("comment"));
+        element.clear();
+        element.sendKeys(comment);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
+    }
+
+    @When("User edits video title to {string}, url to {string} and comment to {string} and clicks submit")
+    public void userEditsVideoTip(String title, String url, String comment) {
+        WebElement element = driver.findElement(By.name("title"));
+        element.clear();
+        element.sendKeys(title);
+        element = driver.findElement(By.name("url"));
+        element.clear();
+        element.sendKeys(url);
+        element = driver.findElement(By.name("comment"));
+        element.clear();
+        element.sendKeys(comment);
+        element = driver.findElement(By.name("submit"));
+        element.submit();
+    }
+
+    @Then("The displayed tip has updated values {string} and {string}")
+    public void displayedTipHasUpdatedValues(String first, String second) {
+        pageHasContent(first);
+        pageHasContent(second);
     }
 
     @When("Author {string} and title {string} are entered")
