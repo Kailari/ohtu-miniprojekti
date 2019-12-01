@@ -22,13 +22,13 @@ public class Stepdefs {
 
     @Before
     public void setUp() {
-        /*
-        System.setProperty(
+        
+        /*System.setProperty(
             "webdriver.chrome.driver",
             "F:\\Downloads\\chromedriver_win32\\chromedriver.exe"
         );
-        driver = new ChromeDriver();
-        */
+        driver = new ChromeDriver();*/
+        
         //driver = new FirefoxDriver();
         driver = new HtmlUnitDriver();
 
@@ -91,6 +91,12 @@ public class Stepdefs {
         WebElement element = driver.findElement(By.linkText("video tip"));
         element.click();
         createNewVideoTip(title + rand, url, comment);
+    }
+
+    @Then("Link URL {string} and video URL {string} are displayed as links")
+    public void LinkTipUrlAndVideoTipUrlAreDisplayedAsLinks(String linkUrl, String videoUrl) {
+        assertTrue(driver.findElement(By.linkText(linkUrl)).isDisplayed());
+        assertTrue(driver.findElement(By.linkText(videoUrl)).isDisplayed());
     }
 
     @When("Author {string} and title {string} are entered")

@@ -35,8 +35,8 @@ Feature: The user can list tips
         When    User chooses to search for videos
         Then    Only the tip with title "TestVideoTitle" is shown and not titles "TestLinkTitle" and "TestBook"
 
-    Scenario: User can visit url of tip by clicking it
-        Given   User has created a link- or video-tip
-        And     User is on the list all page
-        When    User clicks url of newly added tip
-        Then    User is taken to url
+    Scenario: User can click url of link- and video tip
+        Given   User has added a link tip with title "TestLinkTitle", URL "TestLinkUrl" and comment "TestLinkComment"
+        And     User has added a video tip with title "TestVideoTitle", URL "TestVideoUrl" and comment "TestVideoComment"
+        When    User is on the list page
+        Then    Link URL "TestLinkUrl" and video URL "TestVideoUrl" are displayed as links
