@@ -10,6 +10,7 @@ import winkkari.data.Tip.Type;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Winkkari {
     private static final Logger LOG = LoggerFactory.getLogger(Winkkari.class);
@@ -47,15 +48,29 @@ public class Winkkari {
                 Map.entry("tips", genericDAO.getAll())
         ), "list"), new ThymeleafTemplateEngine());
 
-        Spark.get("/new", (req, res) -> new ModelAndView(Map.ofEntries(
+        Spark.get("/list/", (req, res) -> {
+            String searchStr = req.queryParams("search");
+
+            if (searchStr.equals("all")) return new ModelAndView(Map.ofEntries(
+                    Map.entry("tips", genericDAO.getAll())
+            ), "list");
+
+            return new ModelAndView(Map.ofEntries(
+                    Map.entry("tips", genericDAO.getAll()
+                            .stream()
+                            .filter(x -> x.getType() == Tip.Type.valueOf(searchStr))
+                            .collect(Collectors.toList()))), "list");
+        }, new ThymeleafTemplateEngine());
+
+        Spark.get("/newbook", (req, res) -> new ModelAndView(Map.ofEntries(
                 // nothing
-        ), "new"), new ThymeleafTemplateEngine());
+        ), "newbook"), new ThymeleafTemplateEngine());
 
         Spark.get("/edit/:id", (req, res) -> new ModelAndView(Map.ofEntries(
                 Map.entry("tip", genericDAO.get(Type.BOOK, req.params(":id")).get())
         ), "edit"), new ThymeleafTemplateEngine());
 
-        Spark.post("/api/tip/new", (req, res) -> {
+        Spark.post("/api/tip/newbook", (req, res) -> {
             final String author = req.queryParams("author");
             final String title = req.queryParams("title");
 
@@ -74,6 +89,70 @@ public class Winkkari {
             // TODO: ISBN
             bookTipDAO.add(new BookTip(title, author, ""));
 
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.get("/newlink", (req, res) -> new ModelAndView(Map.ofEntries(
+                // nothing
+        ), "newlink"), new ThymeleafTemplateEngine());
+
+        Spark.post("/api/tip/newlink", (req, res) -> {
+            final String url = req.queryParams("url");
+            final String title = req.queryParams("title");
+            final String comment = req.queryParams("comment");
+
+            if (title == null || title.isEmpty()) {
+                LOG.warn("Error adding a new tip, title was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            if (url == null || url.isEmpty()) {
+                LOG.warn("Error adding a new tip, URL was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            if (comment == null || comment.isEmpty()) {
+                LOG.warn("Error adding a new tip, comment was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            linkTipDAO.add(new LinkTip(title,url,comment));
+            res.redirect("/list");
+            return res;
+        });
+
+        Spark.get("/newvideo", (req, res) -> new ModelAndView(Map.ofEntries(
+                // nothing
+        ), "newvideo"), new ThymeleafTemplateEngine());
+
+        Spark.post("/api/tip/newvideo", (req, res) -> {
+            final String url = req.queryParams("url");
+            final String title = req.queryParams("title");
+            final String comment = req.queryParams("comment");
+
+            if (title == null || title.isEmpty()) {
+                LOG.warn("Error adding a new tip, title was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            if (url == null || url.isEmpty()) {
+                LOG.warn("Error adding a new tip, URL was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            if (comment == null || comment.isEmpty()) {
+                LOG.warn("Error adding a new tip, comment was null or empty!");
+                res.redirect("/list");
+                return res;
+            }
+
+            videoTipDAO.add(new VideoTip(title,url,comment));
             res.redirect("/list");
             return res;
         });
