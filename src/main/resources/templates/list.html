@@ -36,8 +36,8 @@
         </td>
         <td>
             <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
-            <span th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}">URL</span>
-            <span th:if="${tip.type.name() == 'VIDEO'}" th:text="${tip.url}">URL</span>
+            <a th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
+            <a th:if="${tip.type.name() == 'VIDEO'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
         </td>
         <td>
             <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()},check=${tip.check})}"
