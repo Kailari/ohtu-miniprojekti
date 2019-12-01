@@ -82,7 +82,7 @@ public class Stepdefs {
     @Then("New tip is not created and the user is taken to the list page")
     public void newTipIsNotCreatedAndTheUserIsTakenToTheListPage() {
         sleep(1);
-        pageHasContent("All tips");
+        pageHasContent("Tips");
     }
 
     @When("Empty author and title {string} are entered")
@@ -104,7 +104,7 @@ public class Stepdefs {
     @Then("All the available tips will be displayed")
     public void allTheAvailableTipsWillBeDisplayed() {
         sleep(1);
-        pageHasContent("All tips");
+        pageHasContent("Tips");
     }
 
     @When("User wants to delete the tip and clicks delete")

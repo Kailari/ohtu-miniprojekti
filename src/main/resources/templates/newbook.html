@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Winkkari</title>
 </head>
 <body>
 
-<h1>Add new tip</h1>
-<form action="/api/tip/new" method="POST">
+<h1>Add a new book tip</h1>
+<form th:action="@{~/api/tip/newbook}" method="post">
     Author: <br/>
     <input type="text" name="author"/><br/>
     Title: <br/>
@@ -17,3 +17,5 @@
 
 </body>
 </html>
+
+
