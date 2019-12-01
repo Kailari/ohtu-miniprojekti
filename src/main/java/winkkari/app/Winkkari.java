@@ -111,7 +111,7 @@ public class Winkkari {
             }
 
             if (comment == null || comment.isEmpty()) {
-                LOG.warn("Error adding a new tip, URL was null or empty!");
+                LOG.warn("Error adding a new tip, comment was null or empty!");
                 res.redirect("/list");
                 return res;
             }
@@ -143,7 +143,7 @@ public class Winkkari {
             }
 
             if (comment == null || comment.isEmpty()) {
-                LOG.warn("Error adding a new tip, URL was null or empty!");
+                LOG.warn("Error adding a new tip, comment was null or empty!");
                 res.redirect("/list");
                 return res;
             }
