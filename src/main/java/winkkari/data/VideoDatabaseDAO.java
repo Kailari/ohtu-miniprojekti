@@ -33,7 +33,7 @@ public class VideoDatabaseDAO extends AbstractDatabaseDAO<VideoTip> {
                         "TITLE VARCHAR(512), " +
                         "URL VARCHAR(512), " +
                         "COMMENT VARCHAR(512), " +
-                        "CHECKED INTEGER);");
+                        "CHECKED BOOLEAN);");
     }
 
     @Override
@@ -95,8 +95,7 @@ public class VideoDatabaseDAO extends AbstractDatabaseDAO<VideoTip> {
             boolean check
     ) throws SQLException {
         var statement = conn.prepareStatement(
-                "UPDATE " +
-                        "FROM " + TABLE_NAME +
+                "UPDATE " + TABLE_NAME +
                         " SET CHECKED=?" +
                         " WHERE ID = ?;");
 

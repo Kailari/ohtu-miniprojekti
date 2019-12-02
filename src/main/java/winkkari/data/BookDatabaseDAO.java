@@ -24,7 +24,7 @@ public class BookDatabaseDAO extends AbstractDatabaseDAO<BookTip> {
                         "TITLE VARCHAR(512), " +
                         "AUTHOR VARCHAR(512), " +
                         "ISBN VARCHAR(13), " +
-                        "CHECKED INTEGER);");
+                        "CHECKED BOOLEAN);");
     }
 
     @Override
