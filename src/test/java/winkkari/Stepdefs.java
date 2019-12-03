@@ -23,8 +23,8 @@ public class Stepdefs {
 
     @Before
     public void setUp() {
-        /*
-        System.setProperty(
+        
+        /*System.setProperty(
             "webdriver.chrome.driver",
             "F:\\Downloads\\chromedriver_win32\\chromedriver.exe"
         );
@@ -150,6 +150,12 @@ public class Stepdefs {
         pageHasContent(first);
         pageHasContent(second);
     }
+    
+    @Then("Link URL {string} and video URL {string} are displayed as links")
+    public void LinkTipUrlAndVideoTipUrlAreDisplayedAsLinks(String linkUrl, String videoUrl) {
+        assertTrue(driver.findElement(By.linkText(linkUrl)).isDisplayed());
+        assertTrue(driver.findElement(By.linkText(videoUrl)).isDisplayed());
+    }
 
     @When("Author {string} and title {string} are entered")
     public void authorAndTitleAreEntered(String author, String title) {
@@ -162,7 +168,11 @@ public class Stepdefs {
     }
 
     @When("Title {string}, URL {string} and comment {string} are entered to create a new video")
-    public void titleUrlAndCommentAreEnteredToCreateVideo(String title, String url, String comment) {
+    public void titleUrlAndCommentAreEnteredToCreateVideo(
+            String title,
+            String url,
+            String comment
+    ) {
         createNewVideoTip(title + rand, url, comment);
     }
 
@@ -284,6 +294,25 @@ public class Stepdefs {
         pageHasContent(title1 + rand);
         pageHasNotContent(title2 + rand);
         pageHasNotContent(title3 + rand);
+    }
+
+    @When("An ISBN is given")
+    public void anISBNIsGiven() {
+        var element = driver.findElement(By.name("isbnSearch"));
+        element.sendKeys("1234567890123");
+        element = driver.findElement(By.cssSelector(".button.find"));
+        element.submit();
+    }
+
+    @Then("Create new fields are automatically filled")
+    public void createNewFieldsAreAutomaticallyFilled() {
+        var title = driver.findElement(By.name("title"));
+        var author = driver.findElement(By.name("author"));
+        var isbn = driver.findElement(By.name("isbn"));
+
+        assertFalse(title.getAttribute("value").isEmpty());
+        assertFalse(author.getAttribute("value").isEmpty());
+        assertFalse(isbn.getAttribute("value").isEmpty());
     }
 
 

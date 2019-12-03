@@ -6,11 +6,21 @@
 <body>
 
 <h1>Add a new book tip</h1>
+<h3>Find by ISBN</h3>
+<form th:action="@{~/newbook}" method="GET">
+    ISBN: <br/>
+    <input type="text" name="isbnSearch"/>
+    <input class="button find" type="submit" value="Find"/>
+</form>
+
+<h3>Create New</h3>
 <form th:action="@{~/api/tip/newbook}" method="post">
     Author: <br/>
-    <input type="text" name="author"/><br/>
+    <input type="text" name="author" th:value="${author}"/><br/>
     Title: <br/>
-    <input type="text" name="title"/><br/>
+    <input type="text" name="title" th:value="${title}"/><br/>
+    ISBN: <br/>
+    <input type="text" name="isbn" th:value="${isbn}"/><br/>
     <br/>
     <input type="submit" name="submit"/>
 </form>

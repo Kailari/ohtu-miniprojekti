@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
 }
 
 application {
@@ -60,6 +61,18 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
         stackTraceFilters = []
+    }
+    jacoco {
+        // CSS parser has some LONG methods which blow up with JaCoCo. Exclude them. Why the fuck is
+        // JaCoCo instrumenting transitive dependencies in the first place?
+        excludes = ["**com/gargoylesoftware/css/*"]
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
     }
 }
 

@@ -34,3 +34,9 @@ Feature: The user can list tips
         And     User has added a video tip with title "TestVideoTitle", URL "TestVideoUrl" and comment "TestVideoComment"
         When    User chooses to search for videos
         Then    Only the tip with title "TestVideoTitle" is shown and not titles "TestLinkTitle" and "TestBook"
+
+    Scenario: User can click url of link- and video tip
+        Given   User has added a link tip with title "TestLinkTitle", URL "TestLinkUrl" and comment "TestLinkComment"
+        And     User has added a video tip with title "TestVideoTitle", URL "TestVideoUrl" and comment "TestVideoComment"
+        When    User is on the list page
+        Then    Link URL "TestLinkUrl" and video URL "TestVideoUrl" are displayed as links
