@@ -95,25 +95,12 @@ public class Stepdefs {
         createNewVideoTip(title + rand, url, comment);
     }
 
-    @Given("User has clicked edit button next to booktip")
-    public void userHasClickedBookEditButton() {
-        WebElement element = driver.findElement(By.linkText("Edit this Booktip!"));
+    @Given("User has clicked edit button next to tip {string}")
+    public void userHasClickedLinkEditButton(String title) {
+        WebElement element = driver.findElement(By.xpath(
+            "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[5]/a"
+        ));
         element.click();
-        sleep(2);
-    }
-
-    @Given("User has clicked edit button next to linktip")
-    public void userHasClickedLinkEditButton() {
-        WebElement element = driver.findElement(By.linkText("Edit this Linktip!"));
-        element.click();
-        sleep(2);
-    }
-
-    @Given("User has clicked edit button next to videotip")
-    public void userHasClickedVideoEditButton() {
-        WebElement element = driver.findElement(By.linkText("Edit this Videotip!"));
-        element.click();
-        sleep(2);
     }
 
     @When("User edits author to {string} and title to {string} and clicks submit")
