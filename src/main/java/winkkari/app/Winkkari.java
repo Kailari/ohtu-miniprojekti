@@ -63,17 +63,17 @@ public class Winkkari {
         Spark.get("/newvideo", newVideo::get, engine);
         Spark.post("/api/tip/newvideo", newVideo::post);
 
-        Spark.get("/editbook/:id", (req, res) -> new ModelAndView(Map.ofEntries(
-            Map.entry("tip", genericDAO.get(Type.BOOK, req.params(":id")).get())
-        ), "editbook"), new ThymeleafTemplateEngine());
+        var editBook = new EditBookRoute(this.bookTipDAO);
+        Spark.get("editbook/:id", editBook::get, engine);
+        Spark.post("/api/tip/editbook/:id", editBook::post);
 
-        Spark.get("/editlink/:id", (req, res) -> new ModelAndView(Map.ofEntries(
-            Map.entry("tip", genericDAO.get(Type.LINK, req.params(":id")).get())
-        ), "editlink"), new ThymeleafTemplateEngine());
+        var editLink = new EditLinkRoute(this.linkTipDAO);
+        Spark.get("editlink/:id", editLink::get, engine);
+        Spark.post("/api/tip/editlink/:id", editLink::post);
 
-        Spark.get("/editvideo/:id", (req, res) -> new ModelAndView(Map.ofEntries(
-            Map.entry("tip", genericDAO.get(Type.VIDEO, req.params(":id")).get())
-        ), "editvideo"), new ThymeleafTemplateEngine());
+        var editVideo = new EditVideoRoute(this.videoTipDAO);
+        Spark.get("editvideo/:id", editVideo::get, engine);
+        Spark.post("/api/tip/editvideo/:id", editVideo::post);
 
         Spark.post("/api/tip/delete/:id", (req, res) -> {
             genericDAO.delete(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"));
@@ -86,48 +86,6 @@ public class Winkkari {
             boolean checked = Boolean.parseBoolean(check);
             LOG.info("Checking: {} ({})", check, checked);
             genericDAO.check(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"), checked);
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.post("/api/tip/edit/:id", (req, res) -> {
-            String title = req.queryParams("title");
-            String author = req.queryParams("author");
-            String check = req.queryParams("checked");
-            boolean checked = Boolean.parseBoolean(check);
-            genericDAO.update(Type.BOOK, new BookTip(req.params(":id"), title, author, "", checked));
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.post("/api/tip/editbook/:id", (req, res) -> {
-            String title = req.queryParams("title");
-            String author = req.queryParams("author");
-            String check = req.queryParams("checked");
-            boolean checked = Boolean.parseBoolean(check);
-            genericDAO.update(Type.BOOK, new BookTip(req.params(":id"), title, author, "", checked));
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.post("/api/tip/editlink/:id", (req, res) -> {
-            String title = req.queryParams("title");
-            String url = req.queryParams("url");
-            String comment = req.queryParams("comment");
-            String check = req.queryParams("checked");
-            boolean checked = Boolean.parseBoolean(check);
-            genericDAO.update(Type.LINK, new LinkTip(req.params(":id"), title, url, comment, checked));
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.post("/api/tip/editvideo/:id", (req, res) -> {
-            String title = req.queryParams("title");
-            String url = req.queryParams("url");
-            String comment = req.queryParams("comment");
-            String check = req.queryParams("checked");
-            boolean checked = Boolean.parseBoolean(check);
-            genericDAO.update(Type.VIDEO, new VideoTip(req.params(":id"), title, url, comment, checked));
             res.redirect("/list");
             return res;
         });
