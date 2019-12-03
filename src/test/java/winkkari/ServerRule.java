@@ -9,6 +9,10 @@ import winkkari.data.VideoTip;
 import winkkari.mock.TestBookTipDAO;
 import winkkari.mock.TestLinkTipDAO;
 import winkkari.mock.TestVideoTipDAO;
+import winkkari.services.BookInfo;
+import winkkari.services.ISBNSearchService;
+
+import java.util.Optional;
 
 public class ServerRule extends ExternalResource {
     private final int port;
@@ -21,13 +25,15 @@ public class ServerRule extends ExternalResource {
     protected void before() {
         Spark.port(port);
 
-        var bookTipDAO = new TestBookTipDAO();
+        final var bookTipDAO = new TestBookTipDAO();
         bookTipDAO.add(new BookTip("This is a BookTip", "Test Author", "1234567891011"));
-        var linkTipDAO = new TestLinkTipDAO();
+        final var linkTipDAO = new TestLinkTipDAO();
         linkTipDAO.add(new LinkTip("This is a LinkTip", "http://www.thishopefullypointsnowhere.com", "WOW! --> CLICK THIS <--"));
-        var videoTipDAO = new TestVideoTipDAO();
+        final var videoTipDAO = new TestVideoTipDAO();
         videoTipDAO.add(new VideoTip("This is a VideoTip", "https://youtu.be/dQw4w9WgXcQ", "A comment"));
-        Winkkari winkkari = new Winkkari(bookTipDAO, linkTipDAO, videoTipDAO);
+
+        final ISBNSearchService testSearchService = isbn -> Optional.of(new BookInfo("1234567890123", "Test Author", "Test Title"));
+        Winkkari winkkari = new Winkkari(bookTipDAO, linkTipDAO, videoTipDAO, testSearchService);
         winkkari.run();
     }
 
@@ -35,5 +41,4 @@ public class ServerRule extends ExternalResource {
     protected void after() {
         Spark.stop();
     }
-
 }

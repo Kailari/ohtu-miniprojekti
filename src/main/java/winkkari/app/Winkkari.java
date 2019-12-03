@@ -6,10 +6,10 @@ import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import winkkari.data.*;
+import winkkari.services.ISBNSearchService;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Winkkari {
     private static final Logger LOG = LoggerFactory.getLogger(Winkkari.class);
@@ -18,12 +18,15 @@ public class Winkkari {
     private final TipDAO<LinkTip> linkTipDAO;
     private final TipDAO<VideoTip> videoTipDAO;
     private final AllTipsDAO genericDAO;
+    private ISBNSearchService isbnSearch;
 
     public Winkkari(
             TipDAO<BookTip> bookTipDAO,
             TipDAO<LinkTip> linkTipDAO,
-            TipDAO<VideoTip> videoTipDAO
+            TipDAO<VideoTip> videoTipDAO,
+            ISBNSearchService isbnSearch
     ) {
+        this.isbnSearch = isbnSearch;
         this.bookTipDAO = bookTipDAO;
         this.linkTipDAO = linkTipDAO;
         this.videoTipDAO = videoTipDAO;
@@ -39,119 +42,25 @@ public class Winkkari {
 
         Spark.staticFiles.location("/public");
 
+        var engine = new ThymeleafTemplateEngine();
         Spark.get("/", (req, res) -> new ModelAndView(Map.ofEntries(
                 // nothing
-        ), "index"), new ThymeleafTemplateEngine());
+        ), "index"), engine);
 
-        Spark.get("/list", (req, res) -> new ModelAndView(Map.ofEntries(
-                Map.entry("tips", genericDAO.getAll())
-        ), "list"), new ThymeleafTemplateEngine());
+        var listPage = new ListPage(this.genericDAO);
+        Spark.get("/list", listPage::get, engine);
 
-        Spark.get("/list/", (req, res) -> {
-            String searchStr = req.queryParams("search");
+        var newBook = new NewBookRoute(this.bookTipDAO, this.isbnSearch);
+        Spark.get("/newbook", newBook::get, engine);
+        Spark.post("/api/tip/newbook", newBook::post);
 
-            if (searchStr.equals("all")) return new ModelAndView(Map.ofEntries(
-                    Map.entry("tips", genericDAO.getAll())
-            ), "list");
+        var newLink = new NewLinkRoute(this.linkTipDAO);
+        Spark.get("/newlink", newLink::get, engine);
+        Spark.post("/api/tip/newlink", newLink::post);
 
-            return new ModelAndView(Map.ofEntries(
-                    Map.entry("tips", genericDAO.getAll()
-                            .stream()
-                            .filter(x -> x.getType() == Tip.Type.valueOf(searchStr))
-                            .collect(Collectors.toList()))), "list");
-        }, new ThymeleafTemplateEngine());
-
-        Spark.get("/newbook", (req, res) -> new ModelAndView(Map.ofEntries(
-                // nothing
-        ), "newbook"), new ThymeleafTemplateEngine());
-
-
-        Spark.post("/api/tip/newbook", (req, res) -> {
-            final String author = req.queryParams("author");
-            final String title = req.queryParams("title");
-
-            if (author == null || author.isEmpty()) {
-                LOG.warn("Error adding a new tip, author was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            if (title == null || title.isEmpty()) {
-                LOG.warn("Error adding a new tip, title was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            // TODO: ISBN
-            bookTipDAO.add(new BookTip(title, author, ""));
-
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.get("/newlink", (req, res) -> new ModelAndView(Map.ofEntries(
-                // nothing
-        ), "newlink"), new ThymeleafTemplateEngine());
-
-        Spark.post("/api/tip/newlink", (req, res) -> {
-            final String url = req.queryParams("url");
-            final String title = req.queryParams("title");
-            final String comment = req.queryParams("comment");
-
-            if (title == null || title.isEmpty()) {
-                LOG.warn("Error adding a new tip, title was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            if (url == null || url.isEmpty()) {
-                LOG.warn("Error adding a new tip, URL was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            if (comment == null || comment.isEmpty()) {
-                LOG.warn("Error adding a new tip, comment was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            linkTipDAO.add(new LinkTip(title,url,comment));
-            res.redirect("/list");
-            return res;
-        });
-
-        Spark.get("/newvideo", (req, res) -> new ModelAndView(Map.ofEntries(
-                // nothing
-        ), "newvideo"), new ThymeleafTemplateEngine());
-
-        Spark.post("/api/tip/newvideo", (req, res) -> {
-            final String url = req.queryParams("url");
-            final String title = req.queryParams("title");
-            final String comment = req.queryParams("comment");
-
-            if (title == null || title.isEmpty()) {
-                LOG.warn("Error adding a new tip, title was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            if (url == null || url.isEmpty()) {
-                LOG.warn("Error adding a new tip, URL was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            if (comment == null || comment.isEmpty()) {
-                LOG.warn("Error adding a new tip, comment was null or empty!");
-                res.redirect("/list");
-                return res;
-            }
-
-            videoTipDAO.add(new VideoTip(title,url,comment));
-            res.redirect("/list");
-            return res;
-        });
+        var newVideo = new NewVideoRoute(this.videoTipDAO);
+        Spark.get("/newvideo", newVideo::get, engine);
+        Spark.post("/api/tip/newvideo", newVideo::post);
 
         Spark.post("/api/tip/delete/:id", (req, res) -> {
             genericDAO.delete(Tip.Type.valueOf(req.queryParams("type")), req.params(":id"));

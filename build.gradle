@@ -62,6 +62,11 @@ test {
         events "passed", "skipped", "failed"
         stackTraceFilters = []
     }
+    jacoco {
+        // CSS parser has some LONG methods which blow up with JaCoCo. Exclude them. Why the fuck is
+        // JaCoCo instrumenting transitive dependencies in the first place?
+        excludes = ["**com/gargoylesoftware/css/*"]
+    }
 }
 
 jacocoTestReport {
