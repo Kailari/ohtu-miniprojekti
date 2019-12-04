@@ -1,6 +1,7 @@
 ohtu-miniprojekti 
 =================
 [![CircleCI](https://circleci.com/gh/Kailari/ohtu-miniprojekti.svg?style=svg)](https://circleci.com/gh/Kailari/ohtu-miniprojekti)
+[![codecov](https://codecov.io/gh/Kailari/ohtu-miniprojekti/branch/master/graph/badge.svg)](https://codecov.io/gh/Kailari/ohtu-miniprojekti)
 
 Sovellus: [Winkkari](https://winkkari.herokuapp.com/)
 
