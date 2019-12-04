@@ -40,8 +40,8 @@ public class BookDatabaseDAO extends AbstractDatabaseDAO<BookTip> {
     protected PreparedStatement getAddQuery(Connection conn, BookTip tip) throws SQLException {
         var statement = conn.prepareStatement(
                 "INSERT INTO " + TABLE_NAME +
-                        "(TITLE, AUTHOR, ISBN, CHECKED) " +
-                        "VALUES(?,?,?,0);");
+                        "(TITLE, AUTHOR, ISBN) " +
+                        "VALUES(?,?,?);");
 
         statement.setString(1, tip.getTitle());
         statement.setString(2, tip.getAuthor());
