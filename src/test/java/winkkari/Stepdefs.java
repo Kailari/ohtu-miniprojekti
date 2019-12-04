@@ -6,7 +6,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -98,7 +97,7 @@ public class Stepdefs {
     @Given("User has clicked edit button next to tip {string}")
     public void userHasClickedLinkEditButton(String title) {
         WebElement element = driver.findElement(By.xpath(
-            "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[5]/a"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[5]/a"
         ));
         element.click();
     }
@@ -150,7 +149,7 @@ public class Stepdefs {
         pageHasContent(first);
         pageHasContent(second);
     }
-    
+
     @Then("Link URL {string} and video URL {string} are displayed as links")
     public void LinkTipUrlAndVideoTipUrlAreDisplayedAsLinks(String linkUrl, String videoUrl) {
         assertTrue(driver.findElement(By.linkText(linkUrl)).isDisplayed());
@@ -304,7 +303,7 @@ public class Stepdefs {
         element.submit();
     }
 
-    @Then("Create new fields are automatically filled")
+    @Then("Create new book fields are automatically filled")
     public void createNewFieldsAreAutomaticallyFilled() {
         var title = driver.findElement(By.name("title"));
         var author = driver.findElement(By.name("author"));
@@ -313,6 +312,25 @@ public class Stepdefs {
         assertFalse(title.getAttribute("value").isEmpty());
         assertFalse(author.getAttribute("value").isEmpty());
         assertFalse(isbn.getAttribute("value").isEmpty());
+    }
+
+    @When("An URL is given")
+    public void anURLIsGiven() {
+        var element = driver.findElement(By.name("urlSearch"));
+        element.sendKeys("https://www.google.com");
+        element = driver.findElement(By.cssSelector(".button.find"));
+        element.submit();
+    }
+
+    @Then("Create new link fields are automatically filled")
+    public void createNewLinkFieldsAreAutomaticallyFilled() {
+        final var url = driver.findElement(By.name("url"));
+        final var title = driver.findElement(By.name("title"));
+        final var comment = driver.findElement(By.name("comment"));
+
+        assertFalse(url.getAttribute("value").isEmpty());
+        assertFalse(title.getAttribute("value").isEmpty());
+        assertFalse(comment.getAttribute("value").isEmpty());
     }
 
 

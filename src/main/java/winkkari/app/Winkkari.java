@@ -6,8 +6,8 @@ import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import winkkari.data.*;
-import winkkari.data.Tip.Type;
 import winkkari.services.ISBNSearchService;
+import winkkari.services.URLSearchService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -20,17 +20,20 @@ public class Winkkari {
     private final TipDAO<VideoTip> videoTipDAO;
     private final AllTipsDAO genericDAO;
     private ISBNSearchService isbnSearch;
+    private URLSearchService urlSearch;
 
     public Winkkari(
             TipDAO<BookTip> bookTipDAO,
             TipDAO<LinkTip> linkTipDAO,
             TipDAO<VideoTip> videoTipDAO,
-            ISBNSearchService isbnSearch
+            ISBNSearchService isbnSearch,
+            URLSearchService urlSearch
     ) {
         this.isbnSearch = isbnSearch;
         this.bookTipDAO = bookTipDAO;
         this.linkTipDAO = linkTipDAO;
         this.videoTipDAO = videoTipDAO;
+        this.urlSearch = urlSearch;
         this.genericDAO = new AllTipsDAO(bookTipDAO, linkTipDAO, videoTipDAO);
     }
 
@@ -55,7 +58,7 @@ public class Winkkari {
         Spark.get("/newbook", newBook::get, engine);
         Spark.post("/api/tip/newbook", newBook::post);
 
-        var newLink = new NewLinkRoute(this.linkTipDAO);
+        var newLink = new NewLinkRoute(this.linkTipDAO, this.urlSearch);
         Spark.get("/newlink", newLink::get, engine);
         Spark.post("/api/tip/newlink", newLink::post);
 

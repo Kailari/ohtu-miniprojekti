@@ -7,22 +7,35 @@ import spark.Request;
 import spark.Response;
 import winkkari.data.LinkTip;
 import winkkari.data.TipDAO;
+import winkkari.services.URLInfo;
+import winkkari.services.URLSearchService;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class NewLinkRoute implements PageRoute {
     private static final Logger LOG = LoggerFactory.getLogger(NewLinkRoute.class);
 
     private final TipDAO<LinkTip> linkTipDAO;
+    private final URLSearchService urlSearch;
 
-    public NewLinkRoute(TipDAO<LinkTip> linkTipDAO) {
+    public NewLinkRoute(TipDAO<LinkTip> linkTipDAO, URLSearchService urlSearch) {
         this.linkTipDAO = linkTipDAO;
+        this.urlSearch = urlSearch;
     }
 
     @Override
     public ModelAndView get(Request req, Response res) {
+        URLInfo defaultValues = Optional.ofNullable(req.queryParams("urlSearch"))
+                                        .map(urlSearch::find)
+                                        .filter(Optional::isPresent)
+                                        .map(Optional::get)
+                                        .orElseGet(() -> new URLInfo("", "", ""));
+
         return new ModelAndView(Map.ofEntries(
-                // nothing
+                Map.entry("url", defaultValues.getUrl()),
+                Map.entry("title", defaultValues.getTitle()),
+                Map.entry("comment", defaultValues.getDescription())
         ), "newlink");
     }
 

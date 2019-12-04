@@ -6,13 +6,21 @@
 <body>
 
 <h1>Add a new link tip</h1>
+<h3>Autofill by URL</h3>
+<form th:action="@{~/newlink}" method="GET">
+    URL: <br/>
+    <input type="text" name="urlSearch"/>
+    <input class="button find" type="submit" value="Find"/>
+</form>
+
+<h3>Create New</h3>
 <form th:action="@{~/api/tip/newlink}" method="POST">
     Title: <br/>
-    <input type="text" name="title"/><br/>
+    <input type="text" name="title" th:value="${title}"/><br/>
     URL: <br/>
-    <input type="text" name="url"/><br/>
+    <input type="text" name="url" th:value="${url}"/><br/>
     Comment: <br/>
-    <input type="text" name="comment"/><br/>
+    <input type="text" name="comment" th:value="${comment}"/><br/>
     <br/>
     <input type="submit" name="submit"/>
 </form>

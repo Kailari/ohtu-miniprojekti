@@ -11,6 +11,8 @@ import winkkari.mock.TestLinkTipDAO;
 import winkkari.mock.TestVideoTipDAO;
 import winkkari.services.BookInfo;
 import winkkari.services.ISBNSearchService;
+import winkkari.services.URLInfo;
+import winkkari.services.URLSearchService;
 
 import java.util.Optional;
 
@@ -32,8 +34,9 @@ public class ServerRule extends ExternalResource {
         final var videoTipDAO = new TestVideoTipDAO();
         videoTipDAO.add(new VideoTip("This is a VideoTip", "https://youtu.be/dQw4w9WgXcQ", "A comment"));
 
-        final ISBNSearchService testSearchService = isbn -> Optional.of(new BookInfo("1234567890123", "Test Author", "Test Title"));
-        Winkkari winkkari = new Winkkari(bookTipDAO, linkTipDAO, videoTipDAO, testSearchService);
+        final ISBNSearchService testSearchService = isbn -> Optional.of(new BookInfo(isbn, "Test Author", "Test Title"));
+        final URLSearchService urlSearchService = url -> Optional.of(new URLInfo(url, "Test Title", "Test Description"));
+        Winkkari winkkari = new Winkkari(bookTipDAO, linkTipDAO, videoTipDAO, testSearchService, urlSearchService);
         winkkari.run();
     }
 
