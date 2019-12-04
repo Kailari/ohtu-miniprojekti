@@ -1,6 +1,6 @@
 package winkkari.data;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -27,16 +27,24 @@ class LinkDatabaseDAOTest {
         }
     }
 
-    @BeforeAll
-    static void beforeAll() {
+    @AfterAll
+    static void afterAll() {
         try {
-            Files.delete(Paths.get("./test.db"));
+            Files.delete(Paths.get("./test.db.h2.db"));
+            Files.delete(Paths.get("./test.db.trace.db"));
+            Files.delete(Paths.get("./test.db.lock.db"));
         } catch (IOException ignored) {
         }
     }
 
     @BeforeEach
     void beforeEach() {
+        try {
+            Files.delete(Paths.get("./test.db.h2.db"));
+            Files.delete(Paths.get("./test.db.trace.db"));
+            Files.delete(Paths.get("./test.db.lock.db"));
+        } catch (IOException ignored) {
+        }
         connectionProvider = spy(new ConnectionProvider());
         dao = new LinkDatabaseDAO(connectionProvider);
         reset(connectionProvider);
@@ -69,5 +77,61 @@ class LinkDatabaseDAOTest {
         assertEquals("testTitle", result.getTitle());
         assertEquals("testUrl", result.getUrl());
         assertEquals("testComment", result.getComment());
+    }
+
+    @Test
+    void gettingWithInvalidIDReturnsEmpty() {
+        assertFalse(dao.get("1234").isPresent());
+    }
+
+    @Test
+    void tipsAreUncheckedByDefault() {
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
+        var added = dao.getAll().stream().findFirst().get();
+        assertFalse(added.getCheck());
+    }
+
+    @Test
+    void checkingATipTogglesItsStatus() {
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
+        var added = dao.getAll().stream().findFirst().get();
+        dao.check(added.getId(), added.getCheck());
+
+        var afterChecking = dao.getAll().stream().findFirst().get();
+        assertTrue(afterChecking.getCheck());
+    }
+
+    @Test
+    void checkingATipAgainTogglesItsStatus() {
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
+        var added = dao.getAll().stream().findFirst().get();
+        dao.check(added.getId(), added.getCheck());
+        var checked = dao.getAll().stream().findFirst().get();
+        dao.check(checked.getId(), checked.getCheck());
+
+        var afterChecking = dao.getAll().stream().findFirst().get();
+        assertFalse(afterChecking.getCheck());
+    }
+
+    @Test
+    void gettingTipReturnsEmptyAfterDeletingTheTip() {
+        dao.add(new LinkTip("testTitle", "testUrl", "testComment"));
+        var added = dao.getAll().stream().findFirst().get();
+
+        dao.delete(added.getId());
+        assertFalse(dao.get(added.getId()).isPresent());
+    }
+
+    @Test
+    void updatingTipChangesItsFields() {
+        dao.add(new LinkTip("original", "original", "original"));
+        var added = dao.getAll().stream().findFirst().get();
+        dao.update(new LinkTip(added.getId(), "updated", "updated", "updated", true));
+
+        var updated = dao.getAll().stream().findFirst().get();
+        assertEquals("updated", updated.getTitle());
+        assertEquals("updated", updated.getUrl());
+        assertEquals("updated", updated.getComment());
+        assertTrue(updated.getCheck());
     }
 }

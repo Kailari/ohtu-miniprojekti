@@ -31,8 +31,8 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
     protected PreparedStatement getAddQuery(Connection conn, LinkTip tip) throws SQLException {
         var statement = conn.prepareStatement(
                 "INSERT INTO " + TABLE_NAME +
-                        "(TITLE, URL, COMMENT) " +
-                        "VALUES(?,?,?);");
+                        "(TITLE, URL, COMMENT, CHECKED) " +
+                        "VALUES(?,?,?,0);");
 
         statement.setString(1, tip.getTitle());
         statement.setString(2, tip.getUrl());
@@ -110,13 +110,15 @@ public class LinkDatabaseDAO extends AbstractDatabaseDAO<LinkTip> {
                 "UPDATE " + TABLE_NAME +
                         " SET TITLE = ?," +
                         " URL = ?," +
-                        " COMMENT = ?" +
+                        " COMMENT = ?," +
+                        " CHECKED = ?" +
                         " WHERE ID = ?");
 
         statement.setString(1, tip.getTitle());
         statement.setString(2, tip.getUrl());
         statement.setString(3, tip.getComment());
-        statement.setInt(4, Integer.parseInt(tip.getId()));
+        statement.setBoolean(4, tip.getCheck());
+        statement.setInt(5, Integer.parseInt(tip.getId()));
         return statement;
     }
 }
