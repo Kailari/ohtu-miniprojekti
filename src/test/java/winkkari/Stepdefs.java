@@ -166,6 +166,11 @@ public class Stepdefs {
         createNewLinkTip(title + rand, url, comment);
     }
 
+    @When("Empty title, URL {string} and comment {string} are entered to create a new link")
+    public void emptyTitleUrlAndCommentAreEnteredToCreateLink(String url, String comment) {
+        createNewLinkTip("", url, comment);
+    }
+
     @When("Title {string}, URL {string} and comment {string} are entered to create a new video")
     public void titleUrlAndCommentAreEnteredToCreateVideo(
             String title,
@@ -173,6 +178,14 @@ public class Stepdefs {
             String comment
     ) {
         createNewVideoTip(title + rand, url, comment);
+    }
+
+    @When("Empty title, URL {string} and comment {string} are entered to create a new video")
+    public void emptyTitleUrlAndCommentAreEnteredToCreateVideo(
+            String url,
+            String comment
+    ) {
+        createNewVideoTip("", url, comment);
     }
 
     @Then("New tip is created")
