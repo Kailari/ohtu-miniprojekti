@@ -29,6 +29,13 @@ public class ISBNScanner implements ISBNSearchService{
         String nl;
         while (scanner.hasNext()) {
             nl = scanner.next();
+
+            if(nl.contains("totalItems")){
+                if(scanner.next().equals("0")){
+                    return Optional.ofNullable(new BookInfo("", "", ""));
+                }
+            }
+
             if(nl.contains("\"title\"")){
                 data.add(scanner.next());
             }

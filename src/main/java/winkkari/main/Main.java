@@ -22,7 +22,6 @@ public class Main {
         final var bookDatabaseDAO = new BookDatabaseDAO();
         final var linkDatabaseDAO = new LinkDatabaseDAO();
         final var videoDatabaseDAO = new VideoDatabaseDAO();
-        // final ISBNSearchService isbnSearch = isbn -> Optional.of(new BookInfo("1234567890123", "Stub Author", "Stub Title"));
         final ISBNScanner isbnSearch = new ISBNScanner();
         final URLSearchService urlSearch = url -> Optional.of(new URLInfo(url, "Stub Title", "Stub Description"));
         final var winkkari = new Winkkari(bookDatabaseDAO, linkDatabaseDAO, videoDatabaseDAO, isbnSearch, urlSearch);

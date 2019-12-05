@@ -58,13 +58,13 @@ public class NewBookRoute implements PageRoute {
             return res;
         }
 
-        // TODO: ISBN
         BookInfo bI = new BookInfo(title, author, "");
         if(!req.queryParams("isbn").isEmpty()){
-            bI = isbnSearch.find(req.queryParams("isbn")).get(); 
+            bI = isbnSearch.find(req.queryParams("isbn")).get();
+            NewBookRoute.this.bookTipDAO.add(new BookTip(bI.getTitle(), bI.getAuthor(), req.queryParams("isbn"))); 
+        }else{
+            NewBookRoute.this.bookTipDAO.add(new BookTip(title, author, ""));
         }
-
-        NewBookRoute.this.bookTipDAO.add(new BookTip(bI.getTitle(), bI.getAuthor(), req.queryParams("isbn")));
 
         res.redirect("/list");
         return res;
