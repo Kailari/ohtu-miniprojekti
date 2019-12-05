@@ -8,6 +8,7 @@ import spark.Response;
 import winkkari.data.BookTip;
 import winkkari.data.TipDAO;
 import winkkari.services.BookInfo;
+import winkkari.services.ISBNScanner;
 import winkkari.services.ISBNSearchService;
 
 import java.util.Map;
@@ -41,6 +42,7 @@ public class NewBookRoute implements PageRoute {
 
     @Override
     public Object post(Request req, Response res) {
+
         final String author = req.queryParams("author");
         final String title = req.queryParams("title");
 
@@ -57,7 +59,12 @@ public class NewBookRoute implements PageRoute {
         }
 
         // TODO: ISBN
-        NewBookRoute.this.bookTipDAO.add(new BookTip(title, author, ""));
+        BookInfo bI = new BookInfo(title, author, "");
+        if(!req.queryParams("isbn").isEmpty()){
+            bI = isbnSearch.find(req.queryParams("isbn")).get(); 
+        }
+
+        NewBookRoute.this.bookTipDAO.add(new BookTip(bI.getTitle(), bI.getAuthor(), req.queryParams("isbn")));
 
         res.redirect("/list");
         return res;
