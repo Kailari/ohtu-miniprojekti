@@ -22,7 +22,9 @@
     <thead>
     <tr>
         <th>Title</th>
-        <th>Author/URL</th>
+        <th>Author</th>
+        <th>URL</th>
+        <th>Comment</th>
         <th>Checked</th>
     </tr>
     </thead>
@@ -36,8 +38,12 @@
         </td>
         <td>
             <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
-            <a th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
-            <a th:if="${tip.type.name() == 'VIDEO'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
+        </td>
+        <td>
+            <a th:if="${tip.type.name() == 'LINK' || tip.type.name() == 'VIDEO'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
+        </td>
+        <td>
+            <span th:if="${tip.type.name() == 'LINK' || tip.type.name() == 'VIDEO'}" th:text="${tip.comment}">comment</span>
         </td>
         <td>
             <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()},check=${tip.check})}"

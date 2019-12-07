@@ -99,7 +99,7 @@ public class Stepdefs {
     @Given("User has clicked edit button next to tip {string}")
     public void userHasClickedLinkEditButton(String title) {
         WebElement element = driver.findElement(By.xpath(
-                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[5]/a"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[7]/a"
         ));
         element.click();
     }
@@ -234,7 +234,7 @@ public class Stepdefs {
     public void userDeletesTip(String title) {
         sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[4]/form/input"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[6]/form/input"
         ));
         System.out.println("TAG IS:   " + element.getTagName());
         element.submit();
