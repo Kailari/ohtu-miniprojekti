@@ -7,23 +7,31 @@
 
 
 <h1>Tips</h1>
-<form th:action="@{~/list}">
-    <select name="search">
-        <option th:value="'all'" th:text="All" selected></option>
-        <option th:value="'BOOK'" th:text="Books"></option>
-        <option th:value="'LINK'" th:text="Links"></option>
-        <option th:value="'VIDEO'" th:text="Videos"></option>
-    </select>
-    <br><br>
-    <input type="submit" value="Search">
-</form>
+
+<p>Search for: </p>
+<ul style="list-style-type:none;">
+    <li><a th:href="@{~/list}">All</a></li>
+    <li><a th:href="@{~/list(search=BOOK)}">Book tips</a></li>
+    <li><a th:href="@{~/list(search=LINK)}">Link tips</a></li>
+    <li><a th:href="@{~/list(search=VIDEO)}">Video tips</a></li>
+</ul>
 
 <table>
     <thead>
     <tr>
-        <th>Title</th>
-        <th>Author/URL</th>
-        <th>Checked</th>
+        <th><a th:if="${order == 'DESC'}"
+                th:href="@{~/list(search=${search},sortBy=title,order=ASC)}">Title</a>
+        <a th:if="${order == 'ASC'}"
+               th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a>
+        <a th:if="${order == ''}"
+               th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a></th>
+        <th><a th:if="${order == 'DESC'}"
+               th:href="@{~/list(search=${search},sortBy=authorURL,order=ASC)}">Author/URL</a>
+            <a th:if="${order == 'ASC'}"
+               th:href="@{~/list(search=${search},sortBy=authorURL,order=DESC)}">Author/URL</a>
+            <a th:if="${order == ''}"
+               th:href="@{~/list(search=${search},sortBy=authorURL,order=DESC)}">Author/URL</a></th>
+
     </tr>
     </thead>
     <tbody>
@@ -68,8 +76,6 @@
     <li><a href="/newvideo">video tip</a></li>
     <li><a href="/newlink">link tip</a></li>
 </ul>
-
-
 
 
 </body>
