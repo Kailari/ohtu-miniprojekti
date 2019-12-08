@@ -10,15 +10,16 @@
 
 <p>Search for: </p>
 <ul style="list-style-type:none;">
-    <li><a th:href="@{~/list}">All</a></li>
-    <li><a th:href="@{~/list(search=BOOK)}">Book tips</a></li>
-    <li><a th:href="@{~/list(search=LINK)}">Link tips</a></li>
-    <li><a th:href="@{~/list(search=VIDEO)}">Video tips</a></li>
+    <li><a th:href="@{~/list(sortBy=title,order=ASC)}">All</a></li>
+    <li><a th:href="@{~/list(search=BOOK,sortBy=title,order=ASC)}">Book tips</a></li>
+    <li><a th:href="@{~/list(search=LINK,sortBy=title,order=ASC)}">Link tips</a></li>
+    <li><a th:href="@{~/list(search=VIDEO,sortBy=title,order=ASC)}">Video tips</a></li>
 </ul>
 
 <table>
     <thead>
     <tr>
+
         <th><a th:if="${order == 'DESC'}"
                 th:href="@{~/list(search=${search},sortBy=title,order=ASC)}">Title</a>
         <a th:if="${order == 'ASC'}"
@@ -26,18 +27,24 @@
         <a th:if="${order == ''}"
                th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a></th>
         <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author</a>
             <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author</a>
             <a th:if="${order == ''}"
-               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a></th>
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author</a></th>
         <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=URL,order=ASC)}">URL</a>
             <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=URL,order=DESC)}">URL</a>
             <a th:if="${order == ''}"
-               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a></th>
-
+               th:href="@{~/list(search=${search},sortBy=URL,order=DESC)}">URL</a></th>
+        <th><a th:if="${order == 'DESC'}"
+               th:href="@{~/list(search=${search},sortBy=comment,order=ASC)}">Comment</a>
+            <a th:if="${order == 'ASC'}"
+               th:href="@{~/list(search=${search},sortBy=comment,order=DESC)}">Comment</a>
+            <a th:if="${order == ''}"
+               th:href="@{~/list(search=${search},sortBy=comment,order=DESC)}">Comment</a></th>
+        <th>Checked</th>
     </tr>
     </thead>
     <tbody>
@@ -50,8 +57,12 @@
         </td>
         <td>
             <span th:if="${tip.type.name() == 'BOOK'}" th:text="${tip.author}">Author</span>
-            <a th:if="${tip.type.name() == 'LINK'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
-            <a th:if="${tip.type.name() == 'VIDEO'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
+        </td>
+        <td>
+            <a th:if="${tip.type.name() == 'LINK' || tip.type.name() == 'VIDEO'}" th:text="${tip.url}" th:href="@{${tip.url}}">URL</a>
+        </td>
+        <td>
+            <span th:if="${tip.type.name() == 'LINK' || tip.type.name() == 'VIDEO'}" th:text="${tip.comment}">comment</span>
         </td>
         <td>
             <form th:action="@{~/api/tip/check/{id}(id=${tip.id},type=${tip.type.name()},check=${tip.check})}"

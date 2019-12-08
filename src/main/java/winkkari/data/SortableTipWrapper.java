@@ -6,12 +6,25 @@ public class SortableTipWrapper {
     public SortableTipWrapper(Tip tip) {
         wrapped = tip;
     }
+
+    public Tip getTip() {
+        return wrapped;
+    }
+
+    public String getId() {
+        return wrapped.getId();
+    }
+
     public Tip.Type getType() {
         return wrapped.getType();
     }
 
     public String getTitle() {
         return wrapped.getTitle();
+    }
+
+    public boolean getCheck() {
+        return wrapped.getCheck();
     }
 
     public String getIsbn() {

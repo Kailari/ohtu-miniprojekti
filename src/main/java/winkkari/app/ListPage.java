@@ -46,15 +46,27 @@ public class ListPage implements PageRoute {
                 .map(type -> type.equals(tip.getType()))
                 .orElse(true);
     }
+
     private Comparator getComparator(Request req) {
-        if (req.queryParams("sortBy").equalsIgnoreCase(""))
-        Comparator.comparing(SortableTipWrapper::getTitle);
-        if (Optional.ofNullable(req.queryParams("order")).isEmpty()) {
+        Comparator comparator = Comparator.comparing(SortableTipWrapper::getTitle);
+        String sortBy = Optional.ofNullable(req.queryParams("sortBy")).orElse("");
+
+        if (sortBy.equalsIgnoreCase("title")) {
             comparator = Comparator.comparing(SortableTipWrapper::getTitle);
-        } else if (req.queryParams("order").equalsIgnoreCase("ASC")) {
+        } else if (sortBy.equalsIgnoreCase("author")) {
+            comparator = Comparator.comparing(SortableTipWrapper::getAuthor);
+        } else if (sortBy.equalsIgnoreCase("URL")) {
+            comparator = Comparator.comparing(SortableTipWrapper::getUrl);
+        } else if (sortBy.equalsIgnoreCase("comment")) {
+            comparator = Comparator.comparing(SortableTipWrapper::getComment);
+        }
+
+        String order = Optional.ofNullable(req.queryParams("order")).orElse("");
+        if (order.equalsIgnoreCase("ASC")) {
             comparator = Comparator.comparing(SortableTipWrapper::getTitle);
-        } else if (req.queryParams("order").equalsIgnoreCase("DESC")) {
+        } else if (order.equalsIgnoreCase("DESC")) {
             comparator = Comparator.comparing(SortableTipWrapper::getTitle).reversed();
         }
+        return comparator;
     }
 }

@@ -99,7 +99,7 @@ public class Stepdefs {
     @Given("User has clicked edit button next to tip {string}")
     public void userHasClickedLinkEditButton(String title) {
         WebElement element = driver.findElement(By.xpath(
-                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[5]/a"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[7]/a"
         ));
         element.click();
     }
@@ -234,7 +234,7 @@ public class Stepdefs {
     public void userDeletesTip(String title) {
         sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[4]/form/input"
+                "//table/tbody/tr[td[span[text()='" + title + rand + "']]]/td[6]/form/input"
         ));
         System.out.println("TAG IS:   " + element.getTagName());
         element.submit();
@@ -262,45 +262,27 @@ public class Stepdefs {
     public void userSearchesForBooks() {
         sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//body/form/select/option[2]"
+                "//body/ul/li[2]/a"
         ));
         element.click();
-        element = driver.findElement(By.xpath(
-                "//body/form/input"
-        ));
-
-
-        element.submit();
     }
 
     @When("User chooses to search for links")
     public void userSearchesForLinks() {
         sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//body/form/select/option[3]"
+                "//body/ul/li[3]/a"
         ));
         element.click();
-        element = driver.findElement(By.xpath(
-                "//body/form/input"
-        ));
-
-
-        element.submit();
     }
 
     @When("User chooses to search for videos")
     public void userSearchesForVideos() {
         sleep(1);
         WebElement element = driver.findElement(By.xpath(
-                "//body/form/select/option[4]"
+                "//body/ul/li[4]/a"
         ));
         element.click();
-        element = driver.findElement(By.xpath(
-                "//body/form/input"
-        ));
-
-
-        element.submit();
     }
 
     @Then("Only the tip with title {string} is shown and not titles {string} and {string}")
@@ -346,6 +328,23 @@ public class Stepdefs {
         assertFalse(url.getAttribute("value").isEmpty());
         assertFalse(title.getAttribute("value").isEmpty());
         assertFalse(comment.getAttribute("value").isEmpty());
+    }
+    @When("User chooses to order by Title")
+    public void orderBy(){
+        WebElement element = driver.findElement(By.xpath(
+                "//body/table/thead/tr/th[1]/a"
+        ));
+        element.click();
+    }
+    @Then("The tip with title {string} is shown first")
+    public void orderIsCorrect(String string) {
+        System.out.println(driver.getPageSource());
+        WebElement element = driver.findElement(By.xpath(
+                "//body/table/tbody/tr/td[1]/span"
+        ));
+        System.out.println(element.getTagName());
+        System.out.println(element.getText());
+        assertTrue(element.getText().contains(string));
     }
 
 
