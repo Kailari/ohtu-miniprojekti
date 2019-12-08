@@ -26,11 +26,17 @@
         <a th:if="${order == ''}"
                th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a></th>
         <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=authorURL,order=ASC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author/URL</a>
             <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=authorURL,order=DESC)}">Author/URL</a>
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a>
             <a th:if="${order == ''}"
-               th:href="@{~/list(search=${search},sortBy=authorURL,order=DESC)}">Author/URL</a></th>
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a></th>
+        <th><a th:if="${order == 'DESC'}"
+               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author/URL</a>
+            <a th:if="${order == 'ASC'}"
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a>
+            <a th:if="${order == ''}"
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author/URL</a></th>
 
     </tr>
     </thead>

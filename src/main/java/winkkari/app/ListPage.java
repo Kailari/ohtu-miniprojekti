@@ -4,6 +4,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import winkkari.data.AllTipsDAO;
+import winkkari.data.SortableTipWrapper;
 import winkkari.data.Tip;
 
 import java.util.Arrays;
@@ -21,14 +22,7 @@ public class ListPage implements PageRoute {
 
     @Override
     public ModelAndView get(Request req, Response res) {
-        Comparator<Tip> comparator = Comparator.comparing(Tip::getTitle);
-        if (Optional.ofNullable(req.queryParams("order")).isEmpty()) {
-            comparator = Comparator.comparing(Tip::getTitle);
-        } else if (req.queryParams("order").equalsIgnoreCase("ASC")) {
-            comparator = Comparator.comparing(Tip::getTitle);
-        } else if (req.queryParams("order").equalsIgnoreCase("DESC")) {
-            comparator = Comparator.comparing(Tip::getTitle).reversed();
-        }
+        Comparator<SortableTipWrapper> comparator = getComparator(req);
         return new ModelAndView(Map.ofEntries(
                 Map.entry("tips",
                         genericDAO.getAll()
@@ -36,6 +30,7 @@ public class ListPage implements PageRoute {
                                 .filter(tip -> Optional.ofNullable(req.queryParams("search"))
                                         .map(searchStr -> typeMatches(tip, searchStr))
                                         .orElse(true))
+                                .map(SortableTipWrapper::new)
                                 .sorted(comparator)
                                 .collect(Collectors.toList())),
                 Map.entry("search", Optional.ofNullable(req.queryParams("search")).orElse("")),
@@ -50,5 +45,16 @@ public class ListPage implements PageRoute {
                 .findFirst()
                 .map(type -> type.equals(tip.getType()))
                 .orElse(true);
+    }
+    private Comparator getComparator(Request req) {
+        if (req.queryParams("sortBy").equalsIgnoreCase(""))
+        Comparator.comparing(SortableTipWrapper::getTitle);
+        if (Optional.ofNullable(req.queryParams("order")).isEmpty()) {
+            comparator = Comparator.comparing(SortableTipWrapper::getTitle);
+        } else if (req.queryParams("order").equalsIgnoreCase("ASC")) {
+            comparator = Comparator.comparing(SortableTipWrapper::getTitle);
+        } else if (req.queryParams("order").equalsIgnoreCase("DESC")) {
+            comparator = Comparator.comparing(SortableTipWrapper::getTitle).reversed();
+        }
     }
 }
