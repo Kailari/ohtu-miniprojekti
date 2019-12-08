@@ -30,13 +30,13 @@ public class SortableTipWrapper {
     public String getIsbn() {
         return wrapped.getType() == Tip.Type.BOOK
                 ? ((BookTip) wrapped).getIsbn()
-                : null;
+                : "";
     }
 
     public String getAuthor() {
         return wrapped.getType() == Tip.Type.BOOK
                 ? ((BookTip) wrapped).getAuthor()
-                : null;
+                : "";
     }
 
     public String getUrl() {
@@ -45,7 +45,7 @@ public class SortableTipWrapper {
         } else if (wrapped.getType() == Tip.Type.VIDEO) {
             return ((VideoTip) wrapped).getUrl();
         } else {
-            return null;
+            return "";
         }
 
     }
@@ -56,7 +56,7 @@ public class SortableTipWrapper {
         } else if (wrapped.getType() == Tip.Type.VIDEO) {
             return ((VideoTip) wrapped).getComment();
         } else {
-            return null;
+            return "";
         }
 
     }

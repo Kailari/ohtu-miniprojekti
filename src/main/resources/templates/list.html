@@ -20,29 +20,29 @@
     <thead>
     <tr>
 
-        <th><a th:if="${order == 'DESC'}"
-                th:href="@{~/list(search=${search},sortBy=title,order=ASC)}">Title</a>
-        <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a>
-        <a th:if="${order == ''}"
+        <th><a th:if="${order == 'DESC' && sortBy == 'title'}"
+                th:href="@{~/list(search=${search},sortBy=title,order=ASC)}">Title&#x25B2;</a>
+        <a th:if="${order == 'ASC' && sortBy == 'title'}"
+               th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title&#x25BC;</a>
+        <a th:if="${sortBy != 'title'}"
                th:href="@{~/list(search=${search},sortBy=title,order=DESC)}">Title</a></th>
-        <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author</a>
-            <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author</a>
-            <a th:if="${order == ''}"
+        <th><a th:if="${order == 'DESC' && sortBy == 'author'}"
+               th:href="@{~/list(search=${search},sortBy=author,order=ASC)}">Author&#x25B2;</a>
+            <a th:if="${order == 'ASC'  && sortBy == 'author'}"
+               th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author&#x25BC;</a>
+            <a th:if="${sortBy != 'author'}"
                th:href="@{~/list(search=${search},sortBy=author,order=DESC)}">Author</a></th>
-        <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=URL,order=ASC)}">URL</a>
-            <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=URL,order=DESC)}">URL</a>
-            <a th:if="${order == ''}"
+        <th><a th:if="${order == 'DESC'  && sortBy == 'URL'}"
+               th:href="@{~/list(search=${search},sortBy=URL,order=ASC)}">URL&#x25B2;</a>
+            <a th:if="${order == 'ASC' && sortBy == 'URL'}"
+               th:href="@{~/list(search=${search},sortBy=URL,order=DESC)}">URL&#x25BC;</a>
+            <a th:if="${sortBy != 'URL'}"
                th:href="@{~/list(search=${search},sortBy=URL,order=DESC)}">URL</a></th>
-        <th><a th:if="${order == 'DESC'}"
-               th:href="@{~/list(search=${search},sortBy=comment,order=ASC)}">Comment</a>
-            <a th:if="${order == 'ASC'}"
-               th:href="@{~/list(search=${search},sortBy=comment,order=DESC)}">Comment</a>
-            <a th:if="${order == ''}"
+        <th><a th:if="${order == 'DESC' && sortBy == 'comment'}"
+               th:href="@{~/list(search=${search},sortBy=comment,order=ASC)}">Comment&#x25B2;</a>
+            <a th:if="${order == 'ASC' && sortBy == 'comment'}"
+               th:href="@{~/list(search=${search},sortBy=comment,order=DESC)}">Comment&#x25BC;</a>
+            <a th:if="${sortBy != 'comment'}"
                th:href="@{~/list(search=${search},sortBy=comment,order=DESC)}">Comment</a></th>
         <th>Checked</th>
     </tr>

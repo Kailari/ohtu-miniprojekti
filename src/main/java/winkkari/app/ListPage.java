@@ -62,10 +62,8 @@ public class ListPage implements PageRoute {
         }
 
         String order = Optional.ofNullable(req.queryParams("order")).orElse("");
-        if (order.equalsIgnoreCase("ASC")) {
-            comparator = Comparator.comparing(SortableTipWrapper::getTitle);
-        } else if (order.equalsIgnoreCase("DESC")) {
-            comparator = Comparator.comparing(SortableTipWrapper::getTitle).reversed();
+        if (order.equalsIgnoreCase("DESC")) {
+            comparator = comparator.reversed();
         }
         return comparator;
     }
