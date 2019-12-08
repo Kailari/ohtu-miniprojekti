@@ -15,6 +15,9 @@ public class ISBNScanner implements ISBNSearchService{
 
     @Override
     public Optional<BookInfo> find(String isbn) {
+        if(isbn.substring(0, 4).equals("978-")){
+            isbn = "978" + isbn.substring(4);
+        }
         String isbnUrl = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn;
         try {
             URL url = new URL(isbnUrl);
@@ -25,19 +28,12 @@ public class ISBNScanner implements ISBNSearchService{
 
         ArrayList<String> data = new ArrayList<String>();
 
-
-        String nl;
+        String nl = "";
         while (scanner.hasNext()) {
-            nl = scanner.next();
+            nl = scanner.nextLine();
 
-            if(nl.contains("totalItems")){
-                if(scanner.next().equals("0")){
-                    return Optional.ofNullable(new BookInfo("", "", ""));
-                }
-            }
-
-            if(nl.contains("\"title\"")){
-                data.add(scanner.next());
+            if(nl.contains("title") && !nl.contains("subtitle")){
+                data.add(nl);
             }
             if(nl.contains("authors")){
                 nl = scanner.nextLine();
@@ -60,10 +56,11 @@ public class ISBNScanner implements ISBNSearchService{
         String title = "";
         String dataTitle = data.get(0);
         String author = "";
-        
         ArrayList<String> formatedData = new ArrayList<>(); 
         boolean flag = false;
+        
         for(int i = 1; i < dataTitle.length(); i++){
+
             String letter = dataTitle.substring(i-1, i);
             
             if(letter.equals("\"")){
@@ -103,7 +100,7 @@ public class ISBNScanner implements ISBNSearchService{
         }
         author = author.substring(0, author.length()-2);
 
-        formatedData.add(title);
+        formatedData.add(title.substring(5));
         formatedData.add(author);
 
         return formatedData;
