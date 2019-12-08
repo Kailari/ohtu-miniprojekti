@@ -8,11 +8,9 @@ import winkkari.data.LinkDatabaseDAO;
 import winkkari.data.VideoDatabaseDAO;
 import winkkari.services.BookInfo;
 import winkkari.services.ISBNScanner;
+import winkkari.services.URLScanner;
 import winkkari.services.ISBNSearchService;
-import winkkari.services.URLInfo;
 import winkkari.services.URLSearchService;
-
-import java.util.Optional;
 
 public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
@@ -23,7 +21,7 @@ public class Main {
         final var linkDatabaseDAO = new LinkDatabaseDAO();
         final var videoDatabaseDAO = new VideoDatabaseDAO();
         final ISBNScanner isbnSearch = new ISBNScanner();
-        final URLSearchService urlSearch = url -> Optional.of(new URLInfo(url, "Stub Title", "Stub Description"));
+        final URLSearchService urlSearch = new URLScanner();
         final var winkkari = new Winkkari(bookDatabaseDAO, linkDatabaseDAO, videoDatabaseDAO, isbnSearch, urlSearch);
 
         LOG.trace("Running...");
