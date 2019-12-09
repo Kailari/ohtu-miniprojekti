@@ -23,3 +23,4 @@ Definition of done
 - Koodi on versionhallinnassa
 - Vaatimuksen hyväksymiskriteerit täyttyvät ja ne on testattu cucumberilla 
 - Toiminnalisuus on testattu manuaalisesti
+
