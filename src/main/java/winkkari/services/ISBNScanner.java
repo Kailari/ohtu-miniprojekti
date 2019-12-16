@@ -64,11 +64,7 @@ public class ISBNScanner implements ISBNSearchService{
             String letter = dataTitle.substring(i-1, i);
             
             if(letter.equals("\"")){
-                if(flag){
-                    flag = false;
-                    continue;
-                }
-                flag = true;
+                flag = !flag;
                 continue;
             }
 
@@ -84,11 +80,7 @@ public class ISBNScanner implements ISBNSearchService{
             for(int i = 1; i < tempAuth.length(); i++){
                 String letter = tempAuth.substring(i-1, i);
                 if(letter.equals("\"")){
-                    if(flag){
-                        flag = false;
-                        continue;
-                    }
-                    flag = true;
+                    flag = !flag;
                     continue;
                 }
     
