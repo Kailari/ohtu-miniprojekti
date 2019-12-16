@@ -9,9 +9,9 @@ Linkki backlogiin: [Backlog](https://docs.google.com/spreadsheets/d/1A7bFuC94nnD
 
 Linkki testikattavuusraporttiin: [CodeCov](https://codecov.io/gh/Kailari/ohtu-miniprojekti)
 
-Ohjelman asennus- ja käyttohje:
+Ohjelman asennus- ja käyttöohje:
 
-Kloonaa repositoria omalle koneelle. Suorita projektin juuressa komento
+Kloonaa repositorio omalle koneelle. Suorita projektin juuressa komento
 
 ```./gradlew run```
 
