@@ -3,6 +3,8 @@ ohtu-miniprojekti
 [![CircleCI](https://circleci.com/gh/Kailari/ohtu-miniprojekti.svg?style=svg)](https://circleci.com/gh/Kailari/ohtu-miniprojekti)
 [![codecov](https://codecov.io/gh/Kailari/ohtu-miniprojekti/branch/master/graph/badge.svg)](https://codecov.io/gh/Kailari/ohtu-miniprojekti)
 
+[Loppuraportti](https://docs.google.com/document/d/1d9-U9_G5XKUXOl6i5f9JtakXF4MiibrDCQBxJXqPJUQ/edit)
+
 Sovellus: [Winkkari](https://winkkari.herokuapp.com/)
 
 Linkki backlogiin: [Backlog](https://docs.google.com/spreadsheets/d/1A7bFuC94nnD2Oi_YOjuGRTWVc1qqFF7l5TMxu0DABs0/edit?usp=sharing)
